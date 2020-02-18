@@ -71,12 +71,12 @@ int main(int argc, char * argv[])
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
   auto node = rclcpp::Node::make_shared("pc2_1_to_2");
-  pub = node->create_publisher<sensor_msgs::msg::PointCloud2>("/camera/depth/points", 100);
+  pub = node->create_publisher<sensor_msgs::msg::PointCloud2>("/xtion/depth/points", 100);
 
   // ROS 1 node and subscriber
   ros::init(argc, argv, "pc2_1_to_2");
   ros::NodeHandle n;
-  ros::Subscriber sub = n.subscribe("/camera/depth/points", 100, TFCallback);
+  ros::Subscriber sub = n.subscribe("/xtion/depth/points", 100, TFCallback);
 
   ros::spin();
 
