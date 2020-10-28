@@ -49,7 +49,7 @@ void TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg)
   ros2_msg->width = ros1_msg->width;
   ros2_msg->encoding = ros1_msg->encoding;
   ros2_msg->is_bigendian = ros1_msg->is_bigendian;
-  ros2_msg->step = ros1_msg->point_step;
+  ros2_msg->step = ros1_msg->step;
   ros2_msg->data = std::move(ros1_msg->data);
 
   pub->publish(std::move(ros2_msg));
