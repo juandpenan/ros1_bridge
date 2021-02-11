@@ -192,6 +192,9 @@ custom_executable(twist_2_to_1 "src/twist_2_to_1.cpp"
 custom_executable(pc2_1_to_2 "src/pc2_1_to_2.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "sensor_msgs")
+custom_executable(image_1_to_2 "src/image_1_to_2.cpp"
+  ROS1_DEPENDENCIES
+  TARGET_DEPENDENCIES "sensor_msgs")
 custom_executable(imu_1_to_2 "src/imu_1_to_2.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "sensor_msgs")
