@@ -16,6 +16,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rmw_implementation_cmake REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
 find_package(tf2_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
@@ -44,6 +45,7 @@ endif()
 
 find_ros1_package(std_msgs REQUIRED)
 find_ros1_package(tf2_msgs REQUIRED)
+find_ros1_package(nav_msgs REQUIRED)
 find_ros1_package(sensor_msgs REQUIRED)
 find_ros1_package(geometry_msgs REQUIRED)
 
@@ -159,6 +161,7 @@ function(custom_executable target)
       "ros1_std_msgs"
       "ros1_tf2_msgs"
       "ros1_sensor_msgs"
+      "ros1_nav_msgs"
       "geometry_msgs"
       )
   endif()
@@ -186,6 +189,9 @@ custom_executable(tf_1_to_2 "src/tf_1_to_2.cpp"
 custom_executable(scan_1_to_2 "src/scan_1_to_2.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "sensor_msgs")
+custom_executable(odom_1_to_2 "src/odom_1_to_2.cpp"
+  ROS1_DEPENDENCIES
+  TARGET_DEPENDENCIES "nav_msgs")
 custom_executable(twist_2_to_1 "src/twist_2_to_1.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "geometry_msgs")
@@ -216,8 +222,11 @@ ament_target_dependencies(${PROJECT_NAME}
   "ros1_std_msgs"
   "ros1_tf2_msgs"
   "ros1_sensor_msgs"
+  "ros1_nav_msgs"
   "ros1_geometry_msgs"
   )
+
+install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
 
 install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION lib
