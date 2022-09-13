@@ -68,7 +68,11 @@ def generate_launch_description():
             executable='twist_2_to_1',
             output='screen',
             parameters=[]),
-
+        Node(
+            package='ros1_bridge',
+            executable='pc2_1_to_2',
+            output='screen',
+            parameters=[]),
         Node(
             package='ros1_bridge',
             executable='imu_1_to_2',

@@ -63,7 +63,7 @@ int main(int argc, char * argv[])
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
   auto node = rclcpp::Node::make_shared("scan_1_to_2");
-  pub = node->create_publisher<sensor_msgs::msg::LaserScan>("/scan", rclcpp::SensorDataQoS());
+  pub = node->create_publisher<sensor_msgs::msg::LaserScan>("/scan", 100);
 
   // ROS 1 node and subscriber
   ros::init(argc, argv, "scan_1_to_2");
