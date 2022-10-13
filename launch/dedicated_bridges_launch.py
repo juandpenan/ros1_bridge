@@ -70,6 +70,11 @@ def generate_launch_description():
             parameters=[]),
         Node(
             package='ros1_bridge',
+            executable='image_1_to_2',
+            output='screen',
+            parameters=[]),
+        Node(
+            package='ros1_bridge',
             executable='pc2_1_to_2',
             output='screen',
             parameters=[]),
