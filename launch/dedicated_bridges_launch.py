@@ -19,7 +19,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, SetEnvironmentVariable
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node
+from launch_ros.actions import Node, LifecycleNode
 
 
 def generate_launch_description():
@@ -73,7 +73,7 @@ def generate_launch_description():
             executable='image_1_to_2',
             output='screen',
             parameters=[]),
-        Node(
+        LifecycleNode(
             package='ros1_bridge',
             executable='pc2_1_to_2',
             output='screen',

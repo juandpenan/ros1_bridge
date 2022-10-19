@@ -30,14 +30,76 @@
 // include ROS 2
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/image.hpp"
+#include "rclcpp/publisher.hpp"
+#include "rclcpp_lifecycle/lifecycle_node.hpp"
+#include "lifecycle_msgs/msg/transition.hpp"
 
-
-rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr pub;
-
-
-void TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg)
+class LifecycleNode: public rclcpp_lifecycle::LifecycleNode
 {
-  if (pub->get_subscription_count() == 0)
+public:
+  explicit LifecycleNode(const std::string & node_name, bool intra_process_comms = false)
+  : rclcpp_lifecycle::LifecycleNode(node_name,
+      rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
+  {}
+
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_configure(const rclcpp_lifecycle::State &)
+  {
+    pub_ = this->create_publisher<std_msgs::msg::String>("lifecycle_chatter", 10);
+
+    RCLCPP_INFO(get_logger(), "on_configure()");
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_activate(const rclcpp_lifecycle::State &)
+  {
+    pub_->on_activate();
+
+    RCLCPP_INFO(get_logger(), "on_activate()");
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_deactivate(const rclcpp_lifecycle::State &)
+  {
+    pub_->on_deactivate();
+
+    RCLCPP_INFO(get_logger(), "on_deactivate()");
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_cleanup(const rclcpp_lifecycle::State &)
+  {
+    pub_.reset();
+
+    RCLCPP_INFO(get_logger(), "on cleanup()");
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_shutdown(const rclcpp_lifecycle::State & state)
+  {
+    pub_.reset();
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+friend void TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg)
+
+private:
+  rclcpp_lifecycle::LifecyclePublisher<std_msgs::msg::String>::SharedPtr pub_;
+};
+
+void
+TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg)
+{
+  if (pub_->get_subscription_count() == 0)
     return;
 
   auto ros2_msg = std::make_unique<sensor_msgs::msg::Image>();
@@ -52,15 +114,14 @@ void TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg)
   ros2_msg->step = ros1_msg->step;
   ros2_msg->data = std::move(ros1_msg->data);
 
-  pub->publish(std::move(ros2_msg));
+  pub_->publish(std::move(ros2_msg));
 }
 
 int main(int argc, char * argv[])
 {
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
-  auto node = rclcpp::Node::make_shared("image_1_to_2");
-  pub = node->create_publisher<sensor_msgs::msg::Image>("/xtion/rgb/image_raw", 100);
+  auto node = std::make_shared<LifecycleNode>("image_1_to_2");
 
   // ROS 1 node and subscriber
   ros::init(argc, argv, "image_1_to_2");
