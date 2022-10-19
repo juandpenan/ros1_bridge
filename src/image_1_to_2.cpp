@@ -34,6 +34,8 @@
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "lifecycle_msgs/msg/transition.hpp"
 
+rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::Image>::SharedPtr pub;
+
 class LifecycleNode: public rclcpp_lifecycle::LifecycleNode
 {
 public:
@@ -45,7 +47,7 @@ public:
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_configure(const rclcpp_lifecycle::State &)
   {
-    pub_ = this->create_publisher<sensor_msgs::msg::image>("/xtion/rgb/image_raw", 100);
+    pub = this->create_publisher<sensor_msgs::msg::Image>("/xtion/rgb/image_raw", 100);
 
     RCLCPP_INFO(get_logger(), "on_configure()");
 
@@ -55,7 +57,7 @@ public:
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_activate(const rclcpp_lifecycle::State &)
   {
-    pub_->on_activate();
+    pub->on_activate();
 
     RCLCPP_INFO(get_logger(), "on_activate()");
 
@@ -65,7 +67,7 @@ public:
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_deactivate(const rclcpp_lifecycle::State &)
   {
-    pub_->on_deactivate();
+    pub->on_deactivate();
 
     RCLCPP_INFO(get_logger(), "on_deactivate()");
 
@@ -75,7 +77,7 @@ public:
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_cleanup(const rclcpp_lifecycle::State &)
   {
-    pub_.reset();
+    pub.reset();
 
     RCLCPP_INFO(get_logger(), "on cleanup()");
 
@@ -83,23 +85,20 @@ public:
   }
 
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-  on_shutdown(const rclcpp_lifecycle::State & state)
+  on_shutdown(const rclcpp_lifecycle::State &)
   {
-    pub_.reset();
+    pub.reset();
 
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
   }
 
 friend void TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg);
-
-private:
-  rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::image>::SharedPtr pub_;
 };
 
 void
 TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg)
 {
-  if (pub_->get_subscription_count() == 0)
+  if (pub->get_subscription_count() == 0)
     return;
 
   auto ros2_msg = std::make_unique<sensor_msgs::msg::Image>();
@@ -114,7 +113,7 @@ TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg)
   ros2_msg->step = ros1_msg->step;
   ros2_msg->data = std::move(ros1_msg->data);
 
-  pub_->publish(std::move(ros2_msg));
+  pub->publish(std::move(ros2_msg));
 }
 
 int main(int argc, char * argv[])
