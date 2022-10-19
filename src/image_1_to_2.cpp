@@ -45,7 +45,7 @@ public:
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_configure(const rclcpp_lifecycle::State &)
   {
-    pub_ = this->create_publisher<std_msgs::msg::String>("lifecycle_chatter", 10);
+    pub_ = this->create_publisher<sensor_msgs::msg::image>("/xtion/rgb/image_raw", 100);
 
     RCLCPP_INFO(get_logger(), "on_configure()");
 
@@ -90,10 +90,10 @@ public:
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
   }
 
-friend void TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg)
+friend void TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg);
 
 private:
-  rclcpp_lifecycle::LifecyclePublisher<std_msgs::msg::String>::SharedPtr pub_;
+  rclcpp_lifecycle::LifecyclePublisher<sensor_msgs::msg::image>::SharedPtr pub_;
 };
 
 void
