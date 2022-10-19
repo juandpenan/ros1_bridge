@@ -31,7 +31,7 @@
   <exec_depend>builtin_interfaces</exec_depend>
   <exec_depend>python3-yaml</exec_depend>
   <exec_depend>rclcpp</exec_depend>
-  <exec_depend>rclcrclcpp_lifecyclepp</exec_depend>
+  <exec_depend>rclcpp_lifecycle</exec_depend>
   <exec_depend>rcutils</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>tf2_msgs</exec_depend>
