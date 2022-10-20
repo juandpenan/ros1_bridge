@@ -68,12 +68,13 @@ def generate_launch_description():
             executable='twist_2_to_1',
             output='screen',
             parameters=[]),
-        Node(
+        LifecycleNode(
+            name='image_1_to_2',
             package='ros1_bridge',
             executable='image_1_to_2',
             output='screen',
             parameters=[]),
-        LifecycleNode(
+        Node(
             package='ros1_bridge',
             executable='pc2_1_to_2',
             output='screen',
