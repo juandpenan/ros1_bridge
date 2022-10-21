@@ -42,13 +42,13 @@ public:
   explicit LifecycleNode(const std::string & node_name, bool intra_process_comms = false)
   : rclcpp_lifecycle::LifecycleNode(node_name,
       rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
-  {}
+  {
+    pub = this->create_publisher<sensor_msgs::msg::Image>("/xtion/rgb/image_raw", 100);
+  }
 
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_configure(const rclcpp_lifecycle::State &)
   {
-    pub = this->create_publisher<sensor_msgs::msg::Image>("/xtion/rgb/image_raw", 100);
-
     RCLCPP_INFO(get_logger(), "on_configure()");
 
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
@@ -92,7 +92,7 @@ public:
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
   }
 
-friend void TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg);
+  friend void TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg);
 };
 
 void
@@ -127,7 +127,10 @@ int main(int argc, char * argv[])
   ros::NodeHandle n;
   ros::Subscriber sub = n.subscribe("/xtion/rgb/image_raw", 100, TFCallback);
 
-  ros::spin();
+  while (rclcpp::ok() && ros::ok()) {
+    ros::spinOnce();
+    rclcpp::spin_some(node->get_node_base_interface());
+  }
 
   rclcpp::shutdown();
 
