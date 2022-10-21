@@ -26,13 +26,10 @@
 #endif
 
 // include ROS 2
-#define BOOST_BIND_NO_PLACEHOLDERS
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "lifecycle_msgs/msg/transition.hpp"
-
-using std::placeholders::_1;
 
 ros::Publisher pub;
 
@@ -44,7 +41,7 @@ public:
       rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
   {
     auto sub_ = this->create_subscription<geometry_msgs::msg::Twist>(
-    "/nav_vel", 100, std::bind(&LifecycleNode::twistCallback, this, _1));
+    "/nav_vel", 100, std::bind(&LifecycleNode::twistCallback, this));
   }
 
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
