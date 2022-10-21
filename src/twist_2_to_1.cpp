@@ -28,24 +28,81 @@
 // include ROS 2
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
-
+#include "rclcpp_lifecycle/lifecycle_node.hpp"
+#include "lifecycle_msgs/msg/transition.hpp"
 
 ros::Publisher pub;
 
-void twistCallback(const geometry_msgs::msg::Twist::SharedPtr ros2_msg)
+class LifecycleNode: public rclcpp_lifecycle::LifecycleNode
 {
-  if (pub.getNumSubscribers() == 0)
-    return;
+public:
+  explicit LifecycleNode(const std::string & node_name, bool intra_process_comms = false)
+  : rclcpp_lifecycle::LifecycleNode(node_name,
+      rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
+  {
+    auto sub = this->create_subscription<geometry_msgs::msg::Twist>(
+    "/nav_vel", 100, twistCallback);
+  }
 
-  geometry_msgs::Twist ros1_msg;
-  ros1_msg.linear.x = ros2_msg->linear.x;
-  ros1_msg.linear.y = ros2_msg->linear.y;
-  ros1_msg.linear.z = ros2_msg->linear.z;
-  ros1_msg.angular.x = ros2_msg->angular.x;
-  ros1_msg.angular.y = ros2_msg->angular.y;
-  ros1_msg.angular.z = ros2_msg->angular.z;
-  pub.publish(ros1_msg);
-}
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_configure(const rclcpp_lifecycle::State &)
+  {
+    RCLCPP_INFO(get_logger(), "on_configure()");
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_activate(const rclcpp_lifecycle::State &)
+  {
+    RCLCPP_INFO(get_logger(), "on_activate()");
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_deactivate(const rclcpp_lifecycle::State &)
+  {
+    RCLCPP_INFO(get_logger(), "on_deactivate()");
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_cleanup(const rclcpp_lifecycle::State &)
+  {
+    sub.reset();
+
+    RCLCPP_INFO(get_logger(), "on cleanup()");
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_shutdown(const rclcpp_lifecycle::State &)
+  {
+    sub.reset();
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  void twistCallback(const geometry_msgs::msg::Twist::SharedPtr ros2_msg)
+  {
+    if (pub.getNumSubscribers() == 0)
+      return;
+
+    geometry_msgs::Twist ros1_msg;
+    ros1_msg.linear.x = ros2_msg->linear.x;
+    ros1_msg.linear.y = ros2_msg->linear.y;
+    ros1_msg.linear.z = ros2_msg->linear.z;
+    ros1_msg.angular.x = ros2_msg->angular.x;
+    ros1_msg.angular.y = ros2_msg->angular.y;
+    ros1_msg.angular.z = ros2_msg->angular.z;
+    pub.publish(ros1_msg);
+  }
+
+};
+
 
 int main(int argc, char * argv[])
 {
@@ -56,11 +113,12 @@ int main(int argc, char * argv[])
 
   // ROS 2 node and subscriber
   rclcpp::init(argc, argv);
-  auto node = rclcpp::Node::make_shared("twist_2_to_1");
-  auto sub = node->create_subscription<geometry_msgs::msg::Twist>(
-    "/nav_vel", 100, twistCallback);
-
-  rclcpp::spin(node);
+  auto node = std::make_shared<LifecycleNode>("twist_2_to_1");
+  
+  while (rclcpp::ok() && ros::ok()) {
+    ros::spinOnce();
+    rclcpp::spin_some(node->get_node_base_interface());
+  }
 
   rclcpp::shutdown();
 

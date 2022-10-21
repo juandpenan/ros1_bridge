@@ -95,8 +95,7 @@ public:
   friend void TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg);
 };
 
-void
-TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg)
+void TFCallback(boost::shared_ptr<sensor_msgs::Image> ros1_msg)
 {
   if (pub->get_subscription_count() == 0)
     return;

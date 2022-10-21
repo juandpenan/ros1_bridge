@@ -32,23 +32,170 @@ def generate_launch_description():
     namespace = LaunchConfiguration('namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
 
-    node = LifecycleNode(
+    tf_static_1_to_2_node = LifecycleNode(
+            name='tf_static_1_to_2',
+            package='ros1_bridge',
+            executable='tf_static_1_to_2',
+            output='screen',
+            parameters=[])
+
+    tf_static_1_to_2_configure = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(tf_static_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE,
+            )
+        )
+
+    tf_static_1_to_2_activate = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(tf_static_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
+            )
+        )
+
+    tf_1_to_2_node = LifecycleNode(
+            name='tf_1_to_2',
+            package='ros1_bridge',
+            executable='tf_1_to_2',
+            output='screen',
+            parameters=[])
+
+    tf_1_to_2_configure = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(tf_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE,
+            )
+        )
+
+    tf_1_to_2_activate = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(tf_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
+            )
+        )
+
+    scan_1_to_2_node = LifecycleNode(
+            name='scan_1_to_2',
+            package='ros1_bridge',
+            executable='scan_1_to_2',
+            output='screen',
+            parameters=[])
+
+    scan_1_to_2_configure = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(scan_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE,
+            )
+        )
+
+    scan_1_to_2_activate = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(scan_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
+            )
+        )
+
+    odom_1_to_2_node = LifecycleNode(
+            name='odom_1_to_2',
+            package='ros1_bridge',
+            executable='odom_1_to_2',
+            output='screen',
+            parameters=[])
+
+    odom_1_to_2_configure = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(odom_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE,
+            )
+        )
+
+    odom_1_to_2_activate = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(odom_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
+            )
+        )
+
+    twist_2_to_1_node = LifecycleNode(
+            name='twist_2_to_1',
+            package='ros1_bridge',
+            executable='twist_2_to_1',
+            output='screen',
+            parameters=[])
+
+    twist_2_to_1_configure = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(twist_2_to_1_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE,
+            )
+        )
+
+    twist_2_to_1_activate = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(twist_2_to_1_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
+            )
+        )
+
+    pc2_1_to_2_node = LifecycleNode(
+            name='pc2_1_to_2',
+            package='ros1_bridge',
+            executable='pc2_1_to_2',
+            output='screen',
+            parameters=[])
+
+    pc2_1_to_2_configure = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(pc2_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE,
+            )
+        )
+
+    pc2_1_to_2_activate = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(pc2_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
+            )
+        )
+
+    imu_1_to_2_node = LifecycleNode(
+            name='imu_1_to_2',
+            package='ros1_bridge',
+            executable='imu_1_to_2',
+            output='screen',
+            parameters=[])
+
+    imu_1_to_2_configure = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(imu_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE,
+            )
+        )
+
+    imu_1_to_2_activate = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(imu_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
+            )
+        )
+
+    image_1_to_2_node = LifecycleNode(
             name='image_1_to_2',
             package='ros1_bridge',
             executable='image_1_to_2',
             output='screen',
             parameters=[])
 
-    node_configure = launch.actions.EmitEvent(
+    image_1_to_2_configure = launch.actions.EmitEvent(
         event=launch_ros.events.lifecycle.ChangeState(
-            lifecycle_node_matcher=launch.events.matchers.matches_action(node),
+            lifecycle_node_matcher=launch.events.matchers.matches_action(image_1_to_2_configure),
             transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE,
             )
         )
 
-    node_active = launch.actions.EmitEvent(
+    image_1_to_2_activate = launch.actions.EmitEvent(
         event=launch_ros.events.lifecycle.ChangeState(
-            lifecycle_node_matcher=launch.events.matchers.matches_action(node),
+            lifecycle_node_matcher=launch.events.matchers.matches_action(image_1_to_2_activate),
             transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
             )
         )
@@ -64,45 +211,12 @@ def generate_launch_description():
             'use_sim_time', default_value='false',
             description='Use simulation (Gazebo) clock if true'),
 
-        Node(
-            package='ros1_bridge',
-            executable='tf_static_1_to_2',
-            output='screen',
-            parameters=[]),
-
-        Node(
-            package='ros1_bridge',
-            executable='tf_1_to_2',
-            output='screen',
-            parameters=[]),
-
-        Node(
-            package='ros1_bridge',
-            executable='scan_1_to_2',
-            output='screen',
-            parameters=[]),
-        Node(
-            package='ros1_bridge',
-            executable='odom_1_to_2',
-            output='screen',
-            parameters=[]),
-
-        Node(
-            package='ros1_bridge',
-            executable='twist_2_to_1',
-            output='screen',
-            parameters=[]),
-        Node(
-            package='ros1_bridge',
-            executable='pc2_1_to_2',
-            output='screen',
-            parameters=[]),
-        Node(
-            package='ros1_bridge',
-            executable='imu_1_to_2',
-            output='screen',
-            parameters=[]),
-        node,
-        node_configure,
-        node_active,
+        tf_static_1_to_2_node, tf_static_1_to_2_configure, tf_static_1_to_2_activate,
+        tf_1_to_2_node, tf_1_to_2_configure, tf_1_to_2_activate,
+        scan_1_to_2_node, scan_1_to_2_configure, scan_1_to_2_activate,
+        odom_1_to_2_node, odom_1_to_2_configure, odom_1_to_2_activate,
+        twist_2_to_1_node, twist_2_to_1_configure, twist_2_to_1_activate,
+        pc2_1_to_2_node, pc2_1_to_2_configure, pc2_1_to_2_activate,
+        imu_1_to_2_node, imu_1_to_2_configure, imu_1_to_2_activate,
+        image_1_to_2_node, image_1_to_2_configure, image_1_to_2_activate,        
         ])

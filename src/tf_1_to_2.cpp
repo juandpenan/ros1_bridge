@@ -30,10 +30,70 @@
 // include ROS 2
 #include "rclcpp/rclcpp.hpp"
 #include "tf2_msgs/msg/tf_message.hpp"
+#include "rclcpp/publisher.hpp"
+#include "rclcpp_lifecycle/lifecycle_node.hpp"
+#include "lifecycle_msgs/msg/transition.hpp"
 
+rclcpp_lifecycle::LifecyclePublisher<tf2_msgs::msg::TFMessage>::SharedPtr pub;
 
-rclcpp::Publisher<tf2_msgs::msg::TFMessage>::SharedPtr pub;
+class LifecycleNode: public rclcpp_lifecycle::LifecycleNode
+{
+public:
+  explicit LifecycleNode(const std::string & node_name, bool intra_process_comms = false)
+  : rclcpp_lifecycle::LifecycleNode(node_name,
+      rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
+  {
+    pub = this->create_publisher<tf2_msgs::msg::TFMessage>("/tf", rclcpp::QoS(100));
+  }
 
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_configure(const rclcpp_lifecycle::State &)
+  {
+    RCLCPP_INFO(get_logger(), "on_configure()");
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_activate(const rclcpp_lifecycle::State &)
+  {
+    pub->on_activate();
+
+    RCLCPP_INFO(get_logger(), "on_activate()");
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_deactivate(const rclcpp_lifecycle::State &)
+  {
+    pub->on_deactivate();
+
+    RCLCPP_INFO(get_logger(), "on_deactivate()");
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_cleanup(const rclcpp_lifecycle::State &)
+  {
+    pub.reset();
+
+    RCLCPP_INFO(get_logger(), "on cleanup()");
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+  on_shutdown(const rclcpp_lifecycle::State &)
+  {
+    pub.reset();
+
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  friend void TFCallback(const tf2_msgs::TFMessage::ConstPtr & ros1_msg);
+};
 
 void TFCallback(const tf2_msgs::TFMessage::ConstPtr & ros1_msg)
 {
@@ -64,15 +124,17 @@ int main(int argc, char * argv[])
 {
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
-  auto node = rclcpp::Node::make_shared("tf_1_to_2");
-  pub = node->create_publisher<tf2_msgs::msg::TFMessage>("/tf", rclcpp::QoS(100));
+  auto node = std::make_shared<LifecycleNode>("tf_1_to_2");
 
   // ROS 1 node and subscriber
   ros::init(argc, argv, "tf_1_to_2");
   ros::NodeHandle n;
   ros::Subscriber sub = n.subscribe("/tf", 100, TFCallback);
 
-  ros::spin();
+  while (rclcpp::ok() && ros::ok()) {
+    ros::spinOnce();
+    rclcpp::spin_some(node->get_node_base_interface());
+  }
 
   rclcpp::shutdown();
 
