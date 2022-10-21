@@ -92,7 +92,7 @@ public:
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
   }
 
-  friend void void imuCallback(boost::shared_ptr<sensor_msgs::Imu> ros1_msg);
+  friend void imuCallback(boost::shared_ptr<sensor_msgs::Imu> ros1_msg);
 };
 
 void imuCallback(boost::shared_ptr<sensor_msgs::Imu> ros1_msg)

@@ -31,6 +31,8 @@
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "lifecycle_msgs/msg/transition.hpp"
 
+using std::placeholders::_1;
+
 ros::Publisher pub;
 
 class LifecycleNode: public rclcpp_lifecycle::LifecycleNode
@@ -40,8 +42,8 @@ public:
   : rclcpp_lifecycle::LifecycleNode(node_name,
       rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
   {
-    auto sub = this->create_subscription<geometry_msgs::msg::Twist>(
-    "/nav_vel", 100, twistCallback);
+    auto sub_ = this->create_subscription<geometry_msgs::msg::Twist>(
+    "/nav_vel", 100, tstd::bind(&LifecycleNode::twistCallback, this, _!));
   }
 
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
@@ -71,7 +73,7 @@ public:
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_cleanup(const rclcpp_lifecycle::State &)
   {
-    sub.reset();
+    sub_.reset();
 
     RCLCPP_INFO(get_logger(), "on cleanup()");
 
@@ -81,7 +83,7 @@ public:
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_shutdown(const rclcpp_lifecycle::State &)
   {
-    sub.reset();
+    sub_.reset();
 
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
   }
@@ -100,6 +102,9 @@ public:
     ros1_msg.angular.z = ros2_msg->angular.z;
     pub.publish(ros1_msg);
   }
+
+private:
+  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr sub_;
 
 };
 

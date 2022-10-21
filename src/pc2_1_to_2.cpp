@@ -130,7 +130,6 @@ int main(int argc, char * argv[])
 {
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
-  auto node = rclcpp::Node::make_shared("pc2_1_to_2");
   auto node = std::make_shared<LifecycleNode>("pc2_1_to_2");
  
   // ROS 1 node and subscriber
