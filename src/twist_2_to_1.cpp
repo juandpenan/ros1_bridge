@@ -43,7 +43,7 @@ public:
       rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
   {
     auto sub_ = this->create_subscription<geometry_msgs::msg::Twist>(
-    "/nav_vel", 100, tstd::bind(&LifecycleNode::twistCallback, this, _!));
+    "/nav_vel", 100, tstd::bind(&LifecycleNode::twistCallback, this, _1));
   }
 
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
@@ -104,7 +104,7 @@ public:
   }
 
 private:
-  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr sub_;
+  rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr sub_;
 
 };
 
