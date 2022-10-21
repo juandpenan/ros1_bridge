@@ -16,6 +16,9 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 
+import launch
+import launch_ros
+import lifecycle_msgs
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, SetEnvironmentVariable
 from launch.substitutions import LaunchConfiguration
@@ -28,6 +31,28 @@ def generate_launch_description():
 
     namespace = LaunchConfiguration('namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
+
+    node = LifecycleNode(
+            name='image_1_to_2',
+            package='ros1_bridge',
+            executable='image_1_to_2',
+            output='screen',
+            parameters=[])
+
+    node_configure = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE,
+            )
+        )
+
+    node_active = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
+            )
+        )
+
 
     return LaunchDescription([
 
@@ -56,7 +81,6 @@ def generate_launch_description():
             executable='scan_1_to_2',
             output='screen',
             parameters=[]),
-
         Node(
             package='ros1_bridge',
             executable='odom_1_to_2',
@@ -66,12 +90,6 @@ def generate_launch_description():
         Node(
             package='ros1_bridge',
             executable='twist_2_to_1',
-            output='screen',
-            parameters=[]),
-        LifecycleNode(
-            name='image_1_to_2',
-            package='ros1_bridge',
-            executable='image_1_to_2',
             output='screen',
             parameters=[]),
         Node(
@@ -84,4 +102,7 @@ def generate_launch_description():
             executable='imu_1_to_2',
             output='screen',
             parameters=[]),
+        node,
+        node_configure,
+        node_active,
         ])
