@@ -188,14 +188,14 @@ def generate_launch_description():
 
     image_1_to_2_configure = launch.actions.EmitEvent(
         event=launch_ros.events.lifecycle.ChangeState(
-            lifecycle_node_matcher=launch.events.matchers.matches_action(image_1_to_2_configure),
+            lifecycle_node_matcher=launch.events.matchers.matches_action(image_1_to_2_node),
             transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE,
             )
         )
 
     image_1_to_2_activate = launch.actions.EmitEvent(
         event=launch_ros.events.lifecycle.ChangeState(
-            lifecycle_node_matcher=launch.events.matchers.matches_action(image_1_to_2_activate),
+            lifecycle_node_matcher=launch.events.matchers.matches_action(image_1_to_2_node),
             transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
             )
         )

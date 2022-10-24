@@ -101,6 +101,8 @@ public:
     pub.publish(ros1_msg);
   }
 
+  friend ros::Publisher pub;
+
 private:
   rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr sub_;
 
@@ -109,14 +111,15 @@ private:
 
 int main(int argc, char * argv[])
 {
-  // ROS 1 node and publisher
-  ros::init(argc, argv, "twist_2_to_1");
-  ros::NodeHandle n;
-  pub = n.advertise<geometry_msgs::Twist>("/nav_vel", 100);
 
   // ROS 2 node and subscriber
   rclcpp::init(argc, argv);
   auto node = std::make_shared<LifecycleNode>("twist_2_to_1");
+
+  // ROS 1 node and publisher
+  ros::init(argc, argv, "twist_2_to_1");
+  ros::NodeHandle n;
+  pub = n.advertise<geometry_msgs::Twist>("/nav_vel", 100);
   
   while (rclcpp::ok() && ros::ok()) {
     ros::spinOnce();
