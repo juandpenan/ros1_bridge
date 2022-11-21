@@ -84,7 +84,7 @@ private:
 
 };
 
-void twistCallback(const geometry_msgs::msg::Pose::SharedPtr ros2_msg)
+void poseCallback(const geometry_msgs::msg::Pose::SharedPtr ros2_msg)
 {
   geometry_msgs::PoseStamped goal_pose;
   goal_pose.header.frame_id = "base_footprint";
@@ -121,8 +121,8 @@ int main(int argc, char * argv[])
   // ROS 2 node, publisher and subscriber
   rclcpp::init(argc, argv);
   auto node = std::make_shared<LifecycleNode>("moveit_2_to_1");
-  auto sub = node->create_subscription<geometry_msgs::msg::Twist>(
-    "/tiago_arm/goal", 100, twistCallback);
+  auto sub = node->create_subscription<geometry_msgs::msg::Pose>(
+    "/tiago_arm/goal", 100, poseCallback);
 
   // ROS 1 node and publisher
   ros::init(argc, argv, "moveit_2_to_1");
