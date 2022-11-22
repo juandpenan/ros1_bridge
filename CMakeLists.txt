@@ -49,6 +49,7 @@ find_ros1_package(tf2_msgs REQUIRED)
 find_ros1_package(nav_msgs REQUIRED)
 find_ros1_package(sensor_msgs REQUIRED)
 find_ros1_package(geometry_msgs REQUIRED)
+find_ros1_package(moveit_ros_planning_interface REQUIRED)
 
 # find ROS 1 packages with messages / services
 include(cmake/find_ros1_interface_packages.cmake)
@@ -165,6 +166,7 @@ function(custom_executable target)
       "ros1_sensor_msgs"
       "ros1_nav_msgs"
       "geometry_msgs"
+      "moveit_ros_planning_interface"
       )
   endif()
   if(ARG_DEPENDENCIES)
@@ -227,6 +229,7 @@ ament_target_dependencies(${PROJECT_NAME}
   "ros1_sensor_msgs"
   "ros1_nav_msgs"
   "ros1_geometry_msgs"
+  "moveit_ros_planning_interface"
   )
 
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})

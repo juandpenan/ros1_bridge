@@ -200,6 +200,26 @@ def generate_launch_description():
             )
         )
 
+    moveit_2_to_1_node = LifecycleNode(
+            name='moveit_2_to_1',
+            package='ros1_bridge',
+            executable='moveit_2_to_1',
+            output='screen',
+            parameters=[])
+
+    moveit_2_to_1_configure = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(moveit_2_to_1_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE,
+            )
+        )
+
+    moveit_2_to_1_activate = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(moveit_2_to_1_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
+            )
+        )
 
     return LaunchDescription([
 
@@ -218,5 +238,6 @@ def generate_launch_description():
         twist_2_to_1_node, twist_2_to_1_configure, twist_2_to_1_activate,
         pc2_1_to_2_node, pc2_1_to_2_configure, pc2_1_to_2_activate,
         imu_1_to_2_node, imu_1_to_2_configure, imu_1_to_2_activate,
-        image_1_to_2_node, image_1_to_2_configure, image_1_to_2_activate,        
+        image_1_to_2_node, image_1_to_2_configure, image_1_to_2_activate,
+        moveit_2_to_1_node, moveit_2_to_1_configure, moveit_2_to_1_activate,    
         ])
