@@ -166,7 +166,7 @@ function(custom_executable target)
       "ros1_sensor_msgs"
       "ros1_nav_msgs"
       "geometry_msgs"
-      "moveit_ros_planning_interface"
+      "ros1_moveit_ros_planning_interface"
       )
   endif()
   if(ARG_DEPENDENCIES)
@@ -229,7 +229,7 @@ ament_target_dependencies(${PROJECT_NAME}
   "ros1_sensor_msgs"
   "ros1_nav_msgs"
   "ros1_geometry_msgs"
-  "moveit_ros_planning_interface"
+  "ros1_moveit_ros_planning_interface"
   )
 
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
