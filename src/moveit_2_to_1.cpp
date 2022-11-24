@@ -88,16 +88,16 @@ void poseCallback(const geometry_msgs::msg::Pose::SharedPtr ros2_msg)
 {
   geometry_msgs::PoseStamped goal_pose;
   goal_pose.header.frame_id = "base_footprint";
-  goal_pose.pose.position.x = ros2_msg.pose.position.x;
-  goal_pose.pose.position.y = ros2_msg.pose.position.y;
-  goal_pose.pose.position.z = ros2_msg.pose.position.z;
-  goal_pose.pose.orientation.x = ros2_msg.pose.orientation.x;
-  goal_pose.pose.orientation.x = ros2_msg.pose.orientation.y;
-  goal_pose.pose.orientation.x = ros2_msg.pose.orientation.z;
-  goal_pose.pose.orientation.x = ros2_msg.pose.orientation.w;
+  goal_pose.pose.position.x = ros2_msg->position.x;
+  goal_pose.pose.position.y = ros2_msg->position.y;
+  goal_pose.pose.position.z = ros2_msg->pose.position.z;
+  goal_pose.pose.orientation.x = ros2_msg->orientation.x;
+  goal_pose.pose.orientation.x = ros2_msg->orientation.y;
+  goal_pose.pose.orientation.x = ros2_msg->orientation.z;
+  goal_pose.pose.orientation.x = ros2_msg->orientation.w;
 
   // Select group
-  moveit::planning_interface::MoveGroup group_arm_torso("arm_torso");
+  moveit::planning_interface::MoveGroupInterface group_arm_torso("arm_torso");
 
   group_arm_torso.setPlannerId("SBLkConfigDefault");
   group_arm_torso.setPoseReferenceFrame("base_footprint");
