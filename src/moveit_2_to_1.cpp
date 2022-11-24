@@ -29,6 +29,7 @@
 // include ROS 2
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/pose.hpp"
+#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "lifecycle_msgs/msg/transition.hpp"
 #include "rclcpp/subscription.hpp"
@@ -86,7 +87,7 @@ private:
 
 void poseCallback(const geometry_msgs::msg::Pose::SharedPtr ros2_msg)
 {
-  geometry_msgs::PoseStamped goal_pose;
+  geometry_msgs::msg::PoseStamped goal_pose;
   goal_pose.header.frame_id = "base_footprint";
   goal_pose.pose.position.x = ros2_msg->position.x;
   goal_pose.pose.position.y = ros2_msg->position.y;
