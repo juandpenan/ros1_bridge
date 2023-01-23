@@ -82,12 +82,12 @@ int main(int argc, char * argv[])
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
   auto node = rclcpp::Node::make_shared("bridge_talker_scan");
-  pub = node->create_publisher<sensor_msgs::msg::LaserScan>("scan", qos);
+  pub = node->create_publisher<sensor_msgs::msg::LaserScan>("/scan", qos);
 
   // ROS 1 node and subscriber
   ros::init(argc, argv, "bridge_listener_scan");
   ros::NodeHandle n;
-  ros::Subscriber sub = n.subscribe("scan", 10, chatterCallback);
+  ros::Subscriber sub = n.subscribe("/scan", 30, chatterCallback);
 
   ros::spin();
 

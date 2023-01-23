@@ -80,12 +80,12 @@ int main(int argc, char * argv[])
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
   auto node = rclcpp::Node::make_shared("bridge_talker_camera");
-  pub = node->create_publisher<sensor_msgs::msg::Image>("camera", 10);
+  pub = node->create_publisher<sensor_msgs::msg::Image>("/xtion/rgb/image_raw", qos);
 
   // ROS 1 node and subscriber
   ros::init(argc, argv, "bridge_talker_camera");
   ros::NodeHandle n;
-  ros::Subscriber sub = n.subscribe("camera", 10, chatterCallback);
+  ros::Subscriber sub = n.subscribe("/xtion/rgb/image_raw", 30, chatterCallback);
 
   ros::spin();
 

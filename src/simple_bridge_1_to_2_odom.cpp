@@ -79,7 +79,7 @@ int main(int argc, char * argv[])
     static const rmw_qos_profile_t rmw_qos_profile_default =
   {
     RMW_QOS_POLICY_HISTORY_KEEP_LAST,
-    30,
+    50,
     RMW_QOS_POLICY_RELIABILITY_RELIABLE,
     RMW_QOS_POLICY_DURABILITY_VOLATILE,
     RMW_QOS_DEADLINE_DEFAULT,
@@ -99,12 +99,12 @@ int main(int argc, char * argv[])
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
   auto node = rclcpp::Node::make_shared("bridge_talker_odom");
-  pub = node->create_publisher<nav_msgs::msg::Odometry>("/odom", qos);
+  pub = node->create_publisher<nav_msgs::msg::Odometry>("/mobile_base_controller/odom", qos);
 
   // ROS 1 node and subscriber
   ros::init(argc, argv, "bridge_listener_odom");
   ros::NodeHandle n;
-  ros::Subscriber sub = n.subscribe("/odom", 10, chatterCallback);
+  ros::Subscriber sub = n.subscribe("/mobile_base_controller/odom", 50, chatterCallback);
 
   ros::spin();
 

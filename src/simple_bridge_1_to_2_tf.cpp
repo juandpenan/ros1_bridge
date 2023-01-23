@@ -106,7 +106,7 @@ int main(int argc, char * argv[])
     static const rmw_qos_profile_t rmw_qos_profile_default =
   {
     RMW_QOS_POLICY_HISTORY_KEEP_LAST,
-    30,
+    100,
     RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT,
     RMW_QOS_POLICY_DURABILITY_VOLATILE,
     RMW_QOS_DEADLINE_DEFAULT,
@@ -132,8 +132,8 @@ int main(int argc, char * argv[])
   // ROS 1 node and subscriber
   ros::init(argc, argv, "bridge_listener_tf");
   ros::NodeHandle n;
-  ros::Subscriber sub = n.subscribe("/tf", 10, chatterCallback);
-  ros::Subscriber sub2 = n.subscribe("/tf_static", 10, chatterCallback2);
+  ros::Subscriber sub = n.subscribe("/tf", 100, chatterCallback);
+  ros::Subscriber sub2 = n.subscribe("/tf_static", 100, chatterCallback2);
 
 
 

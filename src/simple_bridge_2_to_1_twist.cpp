@@ -74,13 +74,13 @@ int main(int argc, char * argv[])
   // ROS 1 node and publisher
   ros::init(argc, argv, "bridge_talker_twist");
   ros::NodeHandle n;
-  pub = n.advertise<geometry_msgs::Twist>("/cmd_vel", 10);
+  pub = n.advertise<geometry_msgs::Twist>("/mobile_base_controller/cmd_vel", 30);
 
   // ROS 2 node and subscriber
   rclcpp::init(argc, argv);
   auto node = rclcpp::Node::make_shared("bridge_listener_twist");
   auto sub = node->create_subscription<geometry_msgs::msg::Twist>(
-    "/cmd_vel", qos, chatterCallback);
+    "/mobile_base_controller/cmd_vel", qos, chatterCallback);
 
   rclcpp::spin(node);
 
