@@ -1,0 +1,36 @@
+from launch import LaunchDescription
+from launch_ros.actions import Node
+import yaml
+from yaml.loader import SafeLoader
+import os
+
+def open_yaml_file():
+	with open("conf.yaml") as f:
+		data = yaml.load(f, Loader=SafeLoader)
+		return data
+
+def generate_launch_description():
+	parser = {"twist":"simple_bridge_2_to_1_twist", 
+	"odom":"simple_bridge_1_to_2_odom"}
+	
+	data = open_yaml_file()
+	counter = 0
+	ld = LaunchDescription()
+	
+	os.environ['ROS_MASTER_URI'] = data["ROS_MASTER_URI"]
+	os.environ['ROS_IP'] = data["ROS_IP"]
+	
+	for bridge in data["bridges"]:
+	
+		bridge_node = Node(
+			package ="ros1_bridge",
+			executable = parser[bridge["msg_type"]],
+			name = f"ros1_bridge{counter}"
+			parameters=[
+                {'topic_name': bridge["topic_name"]}
+            ]
+		)
+		counter+=1
+		ld.add_action(bridge_node)
+		
+	return ld

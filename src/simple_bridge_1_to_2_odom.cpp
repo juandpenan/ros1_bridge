@@ -35,7 +35,7 @@
 
 rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr pub;
 
-void chatterCallback(const nav_msgs::Odometry::ConstPtr & ros1_msg)
+void topic_callback(const nav_msgs::Odometry::ConstPtr & ros1_msg)
 {
   auto ros2_msg = std::make_unique<nav_msgs::msg::Odometry>();
 
@@ -99,12 +99,14 @@ int main(int argc, char * argv[])
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
   auto node = rclcpp::Node::make_shared("bridge_talker_odom");
-  pub = node->create_publisher<nav_msgs::msg::Odometry>("/mobile_base_controller/odom", qos);
+  node->declare_parameter("topic_name", "topic");
+  std::string topic_name =  node->get_parameter("topic_name").get_parameter_value().get<std::string>();
+  pub = node->create_publisher<nav_msgs::msg::Odometry>(topic_name, qos);
 
   // ROS 1 node and subscriber
   ros::init(argc, argv, "bridge_listener_odom");
   ros::NodeHandle n;
-  ros::Subscriber sub = n.subscribe("/mobile_base_controller/odom", 50, chatterCallback);
+  ros::Subscriber sub = n.subscribe(topic_name, 10, topic_callback);
 
   ros::spin();
 

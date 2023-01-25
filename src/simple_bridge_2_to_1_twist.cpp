@@ -32,7 +32,7 @@
 
 ros::Publisher pub;
 
-void chatterCallback(const geometry_msgs::msg::Twist::SharedPtr ros2_msg)
+void topic_callback(const geometry_msgs::msg::Twist::SharedPtr ros2_msg)
 {
 
   geometry_msgs::Twist ros1_msg;
@@ -74,13 +74,15 @@ int main(int argc, char * argv[])
   // ROS 1 node and publisher
   ros::init(argc, argv, "bridge_talker_twist");
   ros::NodeHandle n;
-  pub = n.advertise<geometry_msgs::Twist>("/mobile_base_controller/cmd_vel", 30);
+  node->declare_parameter("topic_name", "topic");
+  std::string topic_name =  node->get_parameter("topic_name").get_parameter_value().get<std::string>();
+  pub = n.advertise<geometry_msgs::Twist>(topic_name, 30);
 
   // ROS 2 node and subscriber
   rclcpp::init(argc, argv);
   auto node = rclcpp::Node::make_shared("bridge_listener_twist");
   auto sub = node->create_subscription<geometry_msgs::msg::Twist>(
-    "/mobile_base_controller/cmd_vel", qos, chatterCallback);
+    topic_name, qos, topic_callback);
 
   rclcpp::spin(node);
 
