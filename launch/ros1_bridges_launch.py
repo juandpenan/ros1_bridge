@@ -32,7 +32,7 @@ def generate_launch_description():
 		bridge_node = Node(
 			package ="ros1_bridge",
 			executable = parser[bridge["msg_type"]],
-			name = f"ros1_bridge{counter}"
+			name = f"ros1_bridge{counter}",
 			parameters=[
                 {'topic_name': bridge["topic_name"]}
             ]
