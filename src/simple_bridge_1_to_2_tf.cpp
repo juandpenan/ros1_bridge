@@ -36,7 +36,7 @@
 
 rclcpp::Publisher<tf2_msgs::msg::TFMessage>::SharedPtr pub, pub2;
 
-void chatterCallback(const tf2_msgs::TFMessage::ConstPtr & ros1_msg)
+void topic_callback(const tf2_msgs::TFMessage::ConstPtr & ros1_msg)
 {
   auto ros2_msg = std::make_unique<tf2_msgs::msg::TFMessage>();
 
@@ -68,7 +68,7 @@ void chatterCallback(const tf2_msgs::TFMessage::ConstPtr & ros1_msg)
   pub->publish(std::move(ros2_msg));
 }
 
-void topic_callback(const tf2_msgs::TFMessage::ConstPtr & ros1_msg)
+void topic_static_callback(const tf2_msgs::TFMessage::ConstPtr & ros1_msg)
 {
   auto ros2_msg = std::make_unique<tf2_msgs::msg::TFMessage>();
 
@@ -135,7 +135,7 @@ int main(int argc, char * argv[])
   ros::init(argc, argv, "bridge_listener_tf");
   ros::NodeHandle n;
   ros::Subscriber sub = n.subscribe(topic_name, 100, topic_callback);
-  ros::Subscriber sub2 = n.subscribe(topic_name + "_static", 100, topic_callback);
+  ros::Subscriber sub2 = n.subscribe(topic_name + "_static", 100, topic_static_callback);
 
 
 

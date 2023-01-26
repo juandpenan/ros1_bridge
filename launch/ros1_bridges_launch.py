@@ -5,7 +5,7 @@ from yaml.loader import SafeLoader
 import os
 
 def open_yaml_file():
-	with open("conf.yaml") as f:
+	with open("/root/conf.yaml") as f:
 		data = yaml.load(f, Loader=SafeLoader)
 		return data
 
@@ -17,8 +17,8 @@ def generate_launch_description():
 	counter = 0
 	ld = LaunchDescription()
 	
-	os.environ['ROS_MASTER_URI'] = data["ROS_MASTER_URI"]
-	os.environ['ROS_IP'] = data["ROS_IP"]
+	#os.environ['ROS_MASTER_URI'] = data["ROS_MASTER_URI"]
+	#os.environ['ROS_IP'] = data["ROS_IP"]
 	
 	for bridge in data["bridges"]:
 	

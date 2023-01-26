@@ -71,16 +71,18 @@ int main(int argc, char * argv[])
     ),
     rmw_qos_profile_default);
 
+  // ROS 2 node
+  rclcpp::init(argc, argv);
+  auto node = rclcpp::Node::make_shared("bridge_listener_twist");
+  node->declare_parameter("topic_name", "topic");
+  std::string topic_name =  node->get_parameter("topic_name").get_parameter_value().get<std::string>();
+
   // ROS 1 node and publisher
   ros::init(argc, argv, "bridge_talker_twist");
   ros::NodeHandle n;
-  node->declare_parameter("topic_name", "topic");
-  std::string topic_name =  node->get_parameter("topic_name").get_parameter_value().get<std::string>();
   pub = n.advertise<geometry_msgs::Twist>(topic_name, 30);
 
-  // ROS 2 node and subscriber
-  rclcpp::init(argc, argv);
-  auto node = rclcpp::Node::make_shared("bridge_listener_twist");
+  // ROS 2 susbscriber
   auto sub = node->create_subscription<geometry_msgs::msg::Twist>(
     topic_name, qos, topic_callback);
 
