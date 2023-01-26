@@ -4,6 +4,7 @@ import yaml
 from yaml.loader import SafeLoader
 import os
 
+
 def open_yaml_file():
 	with open("/root/conf.yaml") as f:
 		data = yaml.load(f, Loader=SafeLoader)
@@ -11,14 +12,20 @@ def open_yaml_file():
 
 def generate_launch_description():
 	parser = {"twist":"simple_bridge_2_to_1_twist", 
-	"odom":"simple_bridge_1_to_2_odom"}
+	"odom":"simple_bridge_1_to_2_odom",
+	"tf": "simple_bridge_1_to_2_tf",
+	"image_raw": "simple_bridge_1_to_2_image",
+	"scan": "simple_bridge_1_to_2_scan",
+	"imu": "simple_bridge_1_to_2_imu"}
 	
 	data = open_yaml_file()
+
+	os.environ['ROS_MASTER_URI'] = data["ROS_MASTER_URI"]
+	os.environ['ROS_IP'] = data["ROS_IP"]
+
 	counter = 0
 	ld = LaunchDescription()
 	
-	#os.environ['ROS_MASTER_URI'] = data["ROS_MASTER_URI"]
-	#os.environ['ROS_IP'] = data["ROS_IP"]
 	
 	for bridge in data["bridges"]:
 	
