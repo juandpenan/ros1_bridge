@@ -20,9 +20,6 @@ def generate_launch_description():
 	
 	data = open_yaml_file()
 
-	os.environ['ROS_MASTER_URI'] = data["ROS_MASTER_URI"]
-	os.environ['ROS_IP'] = data["ROS_IP"]
-
 	counter = 0
 	ld = LaunchDescription()
 	
