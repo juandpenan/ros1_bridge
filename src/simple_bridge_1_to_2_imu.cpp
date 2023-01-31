@@ -98,13 +98,13 @@ int main(int argc, char * argv[])
 
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
-  auto node = rclcpp::Node::make_shared("bridge_talker_imu");
+  auto node = rclcpp::Node::make_shared("bridge_imu");
   node->declare_parameter("topic_name", "topic");
   std::string topic_name =  node->get_parameter("topic_name").get_parameter_value().get<std::string>();
   pub = node->create_publisher<sensor_msgs::msg::Imu>(topic_name, qos);
 
   // ROS 1 node and subscriber
-  ros::init(argc, argv, "bridge_listener_imu");
+  ros::init(argc, argv, node->get_name());
   ros::NodeHandle n;
   ros::Subscriber sub = n.subscribe(topic_name, 200, topic_callback);
 

@@ -73,12 +73,12 @@ int main(int argc, char * argv[])
 
   // ROS 2 node
   rclcpp::init(argc, argv);
-  auto node = rclcpp::Node::make_shared("bridge_listener_twist");
+  auto node = rclcpp::Node::make_shared("bridge_twist");
   node->declare_parameter("topic_name", "topic");
   std::string topic_name =  node->get_parameter("topic_name").get_parameter_value().get<std::string>();
 
   // ROS 1 node and publisher
-  ros::init(argc, argv, "bridge_talker_twist");
+  ros::init(argc, argv, node->get_name());
   ros::NodeHandle n;
   pub = n.advertise<geometry_msgs::Twist>(topic_name, 30);
 

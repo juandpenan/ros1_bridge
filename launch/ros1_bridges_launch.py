@@ -14,7 +14,7 @@ def generate_launch_description():
 	parser = {"twist":"simple_bridge_2_to_1_twist", 
 	"odom":"simple_bridge_1_to_2_odom",
 	"tf": "simple_bridge_1_to_2_tf",
-	"image_raw": "simple_bridge_1_to_2_image",
+	"image": "simple_bridge_1_to_2_image",
 	"scan": "simple_bridge_1_to_2_scan",
 	"imu": "simple_bridge_1_to_2_imu"}
 	

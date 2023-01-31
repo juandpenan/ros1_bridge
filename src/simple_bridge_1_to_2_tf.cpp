@@ -125,14 +125,14 @@ int main(int argc, char * argv[])
 
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
-  auto node = rclcpp::Node::make_shared("bridge_talker_tf");
+  auto node = rclcpp::Node::make_shared("bridge_tf");
   node->declare_parameter("topic_name", "topic");
   std::string topic_name =  node->get_parameter("topic_name").get_parameter_value().get<std::string>();
   pub = node->create_publisher<tf2_msgs::msg::TFMessage>(topic_name, qos);
   pub2 = node->create_publisher<tf2_msgs::msg::TFMessage>(topic_name + "_static", qos);
 
   // ROS 1 node and subscriber
-  ros::init(argc, argv, "bridge_listener_tf");
+  ros::init(argc, argv, node->get_name());
   ros::NodeHandle n;
   ros::Subscriber sub = n.subscribe(topic_name, 100, topic_callback);
   ros::Subscriber sub2 = n.subscribe(topic_name + "_static", 100, topic_static_callback);
