@@ -115,13 +115,33 @@ int main(int argc, char * argv[])
     RMW_QOS_LIVELINESS_LEASE_DURATION_DEFAULT,
     false
   };
-
+  
   auto qos = rclcpp::QoS(
     rclcpp::QoSInitialization(
       rmw_qos_profile_default.history,
       rmw_qos_profile_default.depth
     ),
     rmw_qos_profile_default);
+  
+  static const rmw_qos_profile_t rmw_qos_profile_default_static =
+  {
+    RMW_QOS_POLICY_HISTORY_KEEP_LAST,
+    100,
+    RMW_QOS_POLICY_RELIABILITY_RELIABLE,
+    RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL,
+    RMW_QOS_DEADLINE_DEFAULT,
+    RMW_QOS_LIFESPAN_DEFAULT,
+    RMW_QOS_POLICY_LIVELINESS_SYSTEM_DEFAULT,
+    RMW_QOS_LIVELINESS_LEASE_DURATION_DEFAULT,
+    false
+  };
+
+  auto qos_static = rclcpp::QoS(
+    rclcpp::QoSInitialization(
+      rmw_qos_profile_default.history,
+      rmw_qos_profile_default.depth
+    ),
+    rmw_qos_profile_default_static);
 
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
@@ -129,7 +149,7 @@ int main(int argc, char * argv[])
   node->declare_parameter("topic_name", "topic");
   std::string topic_name =  node->get_parameter("topic_name").get_parameter_value().get<std::string>();
   pub = node->create_publisher<tf2_msgs::msg::TFMessage>(topic_name, qos);
-  pub2 = node->create_publisher<tf2_msgs::msg::TFMessage>(topic_name + "_static", qos);
+  pub2 = node->create_publisher<tf2_msgs::msg::TFMessage>(topic_name + "_static", qos_static);
 
   // ROS 1 node and subscriber
   ros::init(argc, argv, node->get_name());
