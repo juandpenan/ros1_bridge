@@ -42,8 +42,7 @@ void topic_callback(const sensor_msgs::Range::ConstPtr & ros1_msg)
   ros2_msg->header.stamp.nanosec = ros1_msg->header.stamp.nsec;
   ros2_msg->header.frame_id = ros1_msg->header.frame_id;
   
-  ros2_msg->ULTRASOUND = ros1_msg->ULTRASOUND;
-  ros2_msg->INFRARED = ros1_msg->INFRARED;
+  ros2_msg->radiation_type = ros1_msg->radiation_type;
   ros2_msg->field_of_view = ros1_msg->field_of_view;
   ros2_msg->min_range = ros1_msg->min_range;
   ros2_msg->max_range = ros1_msg->max_range;
