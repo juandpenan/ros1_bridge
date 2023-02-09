@@ -16,7 +16,8 @@ def generate_launch_description():
 	"tf": "simple_bridge_1_to_2_tf",
 	"image": "simple_bridge_1_to_2_image",
 	"scan": "simple_bridge_1_to_2_scan",
-	"imu": "simple_bridge_1_to_2_imu"}
+	"imu": "simple_bridge_1_to_2_imu",
+	"range": "simple_bridge_1_to_2_sonar"}
 	
 	data = open_yaml_file()
 
