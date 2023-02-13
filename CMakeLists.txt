@@ -21,6 +21,7 @@ find_package(nav_msgs REQUIRED)
 find_package(tf2_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(rclcpp_action REQUIRED)
 
 # find ROS 1 packages
 set(cmake_extras_files cmake/find_ros1_package.cmake cmake/find_ros1_interface_packages.cmake)
@@ -210,7 +211,7 @@ custom_executable(imu_1_to_2 "src/imu_1_to_2.cpp"
   TARGET_DEPENDENCIES "sensor_msgs")
 custom_executable(moveit_2_to_1 "src/moveit_2_to_1.cpp"
   ROS1_DEPENDENCIES
-  TARGET_DEPENDENCIES "geometry_msgs")
+  TARGET_DEPENDENCIES "rclcpp_action")
 
 custom_executable(simple_bridge "src/simple_bridge.cpp"
   ROS1_DEPENDENCIES

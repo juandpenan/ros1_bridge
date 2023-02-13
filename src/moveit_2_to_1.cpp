@@ -21,18 +21,20 @@
 # pragma clang diagnostic ignored "-Wunused-parameter"
 #endif
 #include "ros/ros.h"
-#include <moveit/move_group_interface/move_group_interface.h>
 #ifdef __clang__
 # pragma clang diagnostic pop
 #endif
 
 // include ROS 2
 #include "rclcpp/rclcpp.hpp"
-#include "geometry_msgs/msg/pose.hpp"
-#include "geometry_msgs/msg/pose_stamped.hpp"
+#include "rclcpp_action/rclcpp_action.hpp"
+#include "control_msgs/action/follow_joint_trajectory_action.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "lifecycle_msgs/msg/transition.hpp"
 #include "rclcpp/subscription.hpp"
+
+// std::sharedptr<actionlib::ActionClient<control_msgs::FollowJointTrajectoryAction>> ros1_client;
+using FollowJointTrajectory = control_msgs::action::FollowJointTrajectoryAction;
 
 class LifecycleNode: public rclcpp_lifecycle::LifecycleNode
 {
@@ -40,7 +42,16 @@ public:
   explicit LifecycleNode(const std::string & node_name, bool intra_process_comms = false)
   : rclcpp_lifecycle::LifecycleNode(node_name,
       rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
-  { }
+  { 
+    ros2_server_ = rclcpp_action::create_server<FollowJointTrajectory>(this->get_node_base_interface(),
+                                                   this->get_node_clock_interface(),
+                                                   this->get_node_logging_interface(),
+                                                   this->get_node_waitables_interface(),
+                                                   "action_name",
+                                                   std::bind(&ActionBridge_2_1::handle_goal, this, std::placeholders::_1, std::placeholders::_2),
+                                                   std::bind(&ActionBridge_2_1::handle_cancel, this, std::placeholders::_1),
+                                                   std::bind(&ActionBridge_2_1::handle_accepted, this, std::placeholders::_1));
+  }
 
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_configure(const rclcpp_lifecycle::State &)
@@ -80,54 +91,52 @@ public:
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
   }
 
+  rclcpp_action::GoalResponse handle_goal(
+    const rclcpp_action::GoalUUID & uuid,
+    std::shared_ptr<const FollowJointTrajectory::Goal> goal)
+  {
+    (void)uuid;
+    RCLCPP_INFO(this->get_logger(), "Received goal request with order %ld", goal->order);
+
+    if (goal->order <= 0) {
+      return rclcpp_action::GoalResponse::REJECT;
+    }
+
+    return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
+  }
+
+  rclcpp_action::CancelResponse handle_cancel(
+    const std::shared_ptr<rclcpp_action::ServerGoalHandle<FollowJointTrajectory>> goal_handle)
+  {
+    (void)goal_handle;
+    RCLCPP_INFO(this->get_logger(), "Received request to cancel goal");
+
+    return rclcpp_action::CancelResponse::ACCEPT;
+  }
+
+  void handle_accepted(const
+    std::shared_ptr<rclcpp_action::ServerGoalHandle<FollowJointTrajectory>> goal_handle)
+  {
+    (void)goal_handle;
+    RCLCPP_INFO(this->get_logger(), "Goal accepted");
+  }
+
 private:
-  rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr sub_;
+    FollowJointTrajectoryros2_server_;
 
 };
 
-void poseCallback(const geometry_msgs::msg::Pose::SharedPtr ros2_msg)
-{
-  geometry_msgs::msg::PoseStamped goal_pose;
-  goal_pose.header.frame_id = "base_footprint";
-  goal_pose.pose.position.x = ros2_msg->position.x;
-  goal_pose.pose.position.y = ros2_msg->position.y;
-  goal_pose.pose.position.z = ros2_msg->position.z;
-  goal_pose.pose.orientation.x = ros2_msg->orientation.x;
-  goal_pose.pose.orientation.x = ros2_msg->orientation.y;
-  goal_pose.pose.orientation.x = ros2_msg->orientation.z;
-  goal_pose.pose.orientation.x = ros2_msg->orientation.w;
-
-  // Select group
-  moveit::planning_interface::MoveGroupInterface group_arm_torso("arm_torso");
-
-  group_arm_torso.setPlannerId("SBLkConfigDefault");
-  group_arm_torso.setPoseReferenceFrame("base_footprint");
-  group_arm_torso.setPoseTarget(goal_pose);
-  group_arm_torso.setStartStateToCurrentState();
-  group_arm_torso.setMaxVelocityScalingFactor(1.0);
-
-  moveit::planning_interface::MoveGroupInterface::Plan my_plan;
-  group_arm_torso.setPlanningTime(5.0);
-
-  bool success = bool(group_arm_torso.plan(my_plan));
-
-  // Execute the plan
-  moveit::planning_interface::MoveItErrorCode e = group_arm_torso.move();
-  if (!bool(e))
-    throw std::runtime_error("Error executing plan");
-}
 
 int main(int argc, char * argv[])
 {
   // ROS 2 node, publisher and subscriber
   rclcpp::init(argc, argv);
   auto node = std::make_shared<LifecycleNode>("moveit_2_to_1");
-  auto sub = node->create_subscription<geometry_msgs::msg::Pose>(
-    "/tiago_arm/goal", 100, poseCallback);
 
   // ROS 1 node and publisher
   ros::init(argc, argv, "moveit_2_to_1");
   ros::NodeHandle n;
+  // client = std::make_shared<actionlib::ActionClient<control_msgs::FollowJointTrajectoryAction>(n);
 
   while (rclcpp::ok() && ros::ok()) {
     rclcpp::spin_some(node->get_node_base_interface());
@@ -138,4 +147,7 @@ int main(int argc, char * argv[])
 
   return 0;
 }
+
+
+
 
