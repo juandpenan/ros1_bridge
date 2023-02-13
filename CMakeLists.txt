@@ -206,11 +206,11 @@ custom_executable(simple_bridge_1_to_2_sonar "src/simple_bridge_1_to_2_sonar.cpp
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "std_msgs" "sensor_msgs")
   
-custom_executable(simple_bridge_1_to_2_sonar "src/simple_bridge_1_to_2_compressed.cpp"
+custom_executable(simple_bridge_1_to_2_compressed "src/simple_bridge_1_to_2_compressed.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "std_msgs" "sensor_msgs")
   
-custom_executable(simple_bridge_1_to_2_sonar "src/simple_bridge_1_to_2_point_cloud.cpp"
+custom_executable(simple_bridge_1_to_2_point_cloud "src/simple_bridge_1_to_2_point_cloud.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "std_msgs" "sensor_msgs")
 
