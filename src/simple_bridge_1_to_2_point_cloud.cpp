@@ -23,7 +23,7 @@
 #endif
 #include "ros/ros.h"
 #include "sensor_msgs/PointCloud2.h"
-#include "sensor_msg/PointField.h"
+#include "sensor_msgs/PointField.h"
 #ifdef __clang__
 # pragma clang diagnostic pop
 #endif
