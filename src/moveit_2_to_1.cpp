@@ -27,19 +27,19 @@
 
 // include ROS 2
 #include "rclcpp/rclcpp.hpp"
-#include "rclcpp_action/rclcpp_action.hpp"
+#include <rclcpp_action/rclcpp_action.hpp>
 #include "control_msgs/action/follow_joint_trajectory.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "lifecycle_msgs/msg/transition.hpp"
 #include "rclcpp/subscription.hpp"
 
 // std::sharedptr<actionlib::ActionClient<control_msgs::FollowJointTrajectoryAction>> ros1_client;
-using FollowJointTrajectory = control_msgs::action::FollowJointTrajectoryAction;
+using FollowJointTrajectory = control_msgs::action::FollowJointTrajectory;
 
 class LifecycleNode: public rclcpp_lifecycle::LifecycleNode
 {
 public:
-  explicit LifecycleNode(const std::string & node_name, bool intra_process_comms = false)
+  explicit LifecycleNode(const std::string & node_name, const std::string & action_name, bool intra_process_comms = false)
   : rclcpp_lifecycle::LifecycleNode(node_name,
       rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
   { 
@@ -47,10 +47,10 @@ public:
                                                    this->get_node_clock_interface(),
                                                    this->get_node_logging_interface(),
                                                    this->get_node_waitables_interface(),
-                                                   "action_name",
-                                                   std::bind(&ActionBridge_2_1::handle_goal, this, std::placeholders::_1, std::placeholders::_2),
-                                                   std::bind(&ActionBridge_2_1::handle_cancel, this, std::placeholders::_1),
-                                                   std::bind(&ActionBridge_2_1::handle_accepted, this, std::placeholders::_1));
+                                                   action_name,
+                                                   std::bind(&LifecycleNode::handle_goal, this, std::placeholders::_1, std::placeholders::_2),
+                                                   std::bind(&LifecycleNode::handle_cancel, this, std::placeholders::_1),
+                                                   std::bind(&LifecycleNode::handle_accepted, this, std::placeholders::_1));
   }
 
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
@@ -96,11 +96,7 @@ public:
     std::shared_ptr<const FollowJointTrajectory::Goal> goal)
   {
     (void)uuid;
-    RCLCPP_INFO(this->get_logger(), "Received goal request with order %ld", goal->order);
-
-    if (goal->order <= 0) {
-      return rclcpp_action::GoalResponse::REJECT;
-    }
+    RCLCPP_INFO(this->get_logger(), "Received goal request ");
 
     return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
   }
@@ -122,7 +118,7 @@ public:
   }
 
 private:
-    FollowJointTrajectoryros2_server_;
+    std::shared_ptr<rclcpp_action::Server<control_msgs::action::FollowJointTrajectory>> ros2_server_;
 
 };
 
@@ -131,7 +127,7 @@ int main(int argc, char * argv[])
 {
   // ROS 2 node, publisher and subscriber
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<LifecycleNode>("moveit_2_to_1");
+  auto node = std::make_shared<LifecycleNode>("moveit_2_to_1", "moveit_action");
 
   // ROS 1 node and publisher
   ros::init(argc, argv, "moveit_2_to_1");
