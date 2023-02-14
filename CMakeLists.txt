@@ -21,6 +21,7 @@ find_package(tf2_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
+find_package(control_msgs REQUIRED)
 
 # find ROS 1 packages
 set(cmake_extras_files cmake/find_ros1_package.cmake cmake/find_ros1_interface_packages.cmake)
@@ -49,6 +50,7 @@ find_ros1_package(tf2_msgs REQUIRED)
 find_ros1_package(nav_msgs REQUIRED)
 find_ros1_package(sensor_msgs REQUIRED)
 find_ros1_package(geometry_msgs REQUIRED)
+find_ros1_package(control_msgs REQUIRED)
 
 # find ROS 1 packages with messages / services
 include(cmake/find_ros1_interface_packages.cmake)
@@ -164,7 +166,7 @@ function(custom_executable target)
       "ros1_tf2_msgs"
       "ros1_sensor_msgs"
       "ros1_nav_msgs"
-      "geometry_msgs"
+      "ros1_control_msgs"
       )
   endif()
   if(ARG_DEPENDENCIES)
@@ -227,7 +229,7 @@ ament_target_dependencies(${PROJECT_NAME}
   "ros1_tf2_msgs"
   "ros1_sensor_msgs"
   "ros1_nav_msgs"
-  "ros1_geometry_msgs"
+  "ros1_control_msgs"
   )
 
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
