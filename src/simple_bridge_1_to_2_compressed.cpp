@@ -29,7 +29,7 @@
 
 // include ROS 2
 #include "rclcpp/rclcpp.hpp"
-#include "sensor_msgs/msg/compressedImage.hpp"
+#include "sensor_msgs/msg/compressed_image.hpp"
 
 
 rclcpp::Publisher<sensor_msgs::msg::CompressedImage>::SharedPtr pub;

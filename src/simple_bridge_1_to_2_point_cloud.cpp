@@ -23,13 +23,15 @@
 #endif
 #include "ros/ros.h"
 #include "sensor_msgs/PointCloud2.h"
+#include "sensor_msg/PointField.h"
 #ifdef __clang__
 # pragma clang diagnostic pop
 #endif
 
 // include ROS 2
 #include "rclcpp/rclcpp.hpp"
-#include "sensor_msgs/msg/pointCloud2.hpp"
+#include "sensor_msgs/msg/point_cloud2.hpp"
+#include "sensor_msgs/msg/point_field.hpp"
 
 
 rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr pub;
@@ -44,11 +46,15 @@ void topic_callback(const sensor_msgs::PointCloud2::ConstPtr & ros1_msg)
   
   ros2_msg->height = ros1_msg->height;
   ros2_msg->width = ros1_msg->width;
-  
-  ros2_msg->fields->name = ros1_msg->fields->name;
-  ros2_msg->fields->offset = ros1_msg->fields->offset;
-  ros2_msg->fields->datatype = ros1_msg->fields->datatype;
-  ros2_msg->fields->count = ros1_msg->fields->count;
+
+  for (sensor_msgs::PointField p1 : ros1_msg->fields){
+        sensor_msgs::msg::PointField p2;
+        p2.name = p1.name;
+        p2.offset = p1.offset;
+        p2.datatype = p1.datatype;
+        p2.count = p1.count;
+        ros2_msg->fields.push_back(p2);
+  }
 
   ros2_msg->is_bigendian = ros1_msg->is_bigendian;
   ros2_msg->point_step = ros1_msg->point_step;
