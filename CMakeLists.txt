@@ -11,7 +11,6 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 find_package(rmw REQUIRED)
-
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
@@ -50,7 +49,6 @@ find_ros1_package(tf2_msgs REQUIRED)
 find_ros1_package(nav_msgs REQUIRED)
 find_ros1_package(sensor_msgs REQUIRED)
 find_ros1_package(geometry_msgs REQUIRED)
-find_ros1_package(moveit_ros_planning_interface REQUIRED)
 
 # find ROS 1 packages with messages / services
 include(cmake/find_ros1_interface_packages.cmake)
@@ -167,7 +165,6 @@ function(custom_executable target)
       "ros1_sensor_msgs"
       "ros1_nav_msgs"
       "geometry_msgs"
-      "ros1_moveit_ros_planning_interface"
       )
   endif()
   if(ARG_DEPENDENCIES)
@@ -184,7 +181,6 @@ custom_executable(simple_bridge_1_to_2 "src/simple_bridge_1_to_2.cpp"
 custom_executable(simple_bridge_2_to_1 "src/simple_bridge_2_to_1.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "std_msgs")
-
 custom_executable(tf_static_1_to_2 "src/tf_static_1_to_2.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "tf2_msgs")
@@ -212,7 +208,6 @@ custom_executable(imu_1_to_2 "src/imu_1_to_2.cpp"
 custom_executable(moveit_2_to_1 "src/moveit_2_to_1.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "rclcpp_action")
-
 custom_executable(simple_bridge "src/simple_bridge.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "std_msgs")
@@ -233,7 +228,6 @@ ament_target_dependencies(${PROJECT_NAME}
   "ros1_sensor_msgs"
   "ros1_nav_msgs"
   "ros1_geometry_msgs"
-  "ros1_moveit_ros_planning_interface"
   )
 
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})

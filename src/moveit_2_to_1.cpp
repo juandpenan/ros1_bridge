@@ -28,7 +28,7 @@
 // include ROS 2
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
-#include "control_msgs/action/follow_joint_trajectory_action.hpp"
+#include "control_msgs/action/follow_joint_trajectory.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "lifecycle_msgs/msg/transition.hpp"
 #include "rclcpp/subscription.hpp"
@@ -147,7 +147,3 @@ int main(int argc, char * argv[])
 
   return 0;
 }
-
-
-
-
