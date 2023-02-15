@@ -47,16 +47,16 @@ using ROS2Result = typename FollowJointTrajectory::Result;
 using ROS1Result = typename actionlib::ActionServer<FollowJointTrajectoryRos1>::Result;
 using ROS2Feedback = typename FollowJointTrajectory::Feedback;
 using ROS1Feedback = typename actionlib::ActionServer<FollowJointTrajectoryRos1>::Feedback;
+ros::NodeHandle node_handle;
 
 class LifecycleNode: public rclcpp_lifecycle::LifecycleNode
 {
 public:
-  explicit LifecycleNode(ros::NodeHandle ros1_node, const std::string & node_name, const std::string & action_name, bool intra_process_comms = false)
+  explicit LifecycleNode(const std::string & node_name, const std::string & action_name, bool intra_process_comms = false)
   : rclcpp_lifecycle::LifecycleNode(node_name,
       rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
   {
-    node_handle_ = ros1_node;
-    ros1_client_ = std::make_shared<ROS1Client>(node_handle_, action_name);
+    ros1_client_ = std::make_shared<ROS1Client>(node_handle, action_name);
 
     ros2_server_ = rclcpp_action::create_server<FollowJointTrajectory>(this->get_node_base_interface(),
                                                    this->get_node_clock_interface(),
@@ -263,7 +263,7 @@ private:
     std::shared_ptr<rclcpp_action::Server<control_msgs::action::FollowJointTrajectory>> ros2_server_;
     std::shared_ptr<ROS1Client> ros1_client_;
     std::shared_ptr<ROS1ClientGoalHandle> ros1_goal_handle_;
-    ros::NodeHandle node_handle_;
+    ros::NodeHandle node_handle;
     std::mutex mutex_;
 };
 
@@ -271,12 +271,11 @@ private:
 int main(int argc, char * argv[])
 {
   // ROS 1 node and publisher
-  ros::init(argc, argv, "moveit_2_to_1");
-  ros::NodeHandle n;
+  ros::init(argc, argv, "moveit_2_to_1_ros1");
 
   // ROS 2 node, publisher and subscriber
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<LifecycleNode>(n, "moveit_2_to_1", "/gripper_controller/follow_joint_trajectory");
+  auto node = std::make_shared<LifecycleNode>(n, "moveit_2_to_1_ros2", "/gripper_controller/follow_joint_trajectory");
 
   while (rclcpp::ok() && ros::ok()) {
     rclcpp::spin_some(node->get_node_base_interface());
