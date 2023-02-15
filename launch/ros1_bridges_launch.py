@@ -19,7 +19,7 @@ def generate_launch_description():
 	"imu": "simple_bridge_1_to_2_imu",
 	"range": "simple_bridge_1_to_2_sonar",
 	"compressed": "simple_bridge_1_to_2_compressed",
-	"point_cloud2": "simple_bridge_1_to_2_point_cloud2"}}
+	"point_cloud2": "simple_bridge_1_to_2_point_cloud2"}
 	
 	data = open_yaml_file()
 
