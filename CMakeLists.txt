@@ -51,6 +51,7 @@ find_ros1_package(nav_msgs REQUIRED)
 find_ros1_package(sensor_msgs REQUIRED)
 find_ros1_package(geometry_msgs REQUIRED)
 find_ros1_package(control_msgs REQUIRED)
+find_ros1_package(actionlib REQUIRED)
 
 # find ROS 1 packages with messages / services
 include(cmake/find_ros1_interface_packages.cmake)
@@ -167,6 +168,7 @@ function(custom_executable target)
       "ros1_sensor_msgs"
       "ros1_nav_msgs"
       "ros1_control_msgs"
+      "ros1_actionlib"
       )
   endif()
   if(ARG_DEPENDENCIES)
