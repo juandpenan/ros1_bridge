@@ -213,6 +213,10 @@ custom_executable(simple_bridge_1_to_2_compressed "src/simple_bridge_1_to_2_comp
 custom_executable(simple_bridge_1_to_2_point_cloud "src/simple_bridge_1_to_2_point_cloud.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "std_msgs" "sensor_msgs")
+  
+custom_executable(simple_bridge_1_to_2_camera_info "src/simple_bridge_1_to_2_camera_info.cpp"
+  ROS1_DEPENDENCIES
+  TARGET_DEPENDENCIES "std_msgs" "sensor_msgs")
 
 custom_executable(simple_bridge_2_to_1 "src/simple_bridge_2_to_1.cpp"
   ROS1_DEPENDENCIES
