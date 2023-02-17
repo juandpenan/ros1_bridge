@@ -44,28 +44,28 @@ void topic_callback(const sensor_msgs::CameraInfo::ConstPtr & ros1_msg)
   
   ros2_msg->height = ros1_msg->height;
   ros2_msg->width = ros1_msg->width;
-  ros2_msg->distorsion_model = ros1_msg->distorsion_model;
-  ros2_msg->D = ros1_msg->D;
+  ros2_msg->distortion_model = ros1_msg->distortion_model;
+  ros2_msg->d = ros1_msg->D;
 
   for(int i=0; i < 9; i++)
   {
-    ros2_msg->K[i] = ros1_msg->K[i];
-    ros2_msg->R[i] = ros1_msg->R[i];
+    ros2_msg->k[i] = ros1_msg->K[i];
+    ros2_msg->r[i] = ros1_msg->R[i];
   }
 
   for(int i=0; i < 12; i++)
   {
-    ros2_msg->P[i] = ros1_msg->P[i];
+    ros2_msg->p[i] = ros1_msg->P[i];
   }
 
   ros2_msg->binning_x = ros1_msg->binning_x;
   ros2_msg->binning_y = ros1_msg->binning_y;
 
-  ros2_msg->roi->x_offset = ros1_msg->roi->x_offset;
-  ros2_msg->roi->y_offset = ros1_msg->roi->y_offset;
-  ros2_msg->roi->height = ros1_msg->roi->height;
-  ros2_msg->roi->width = ros1_msg->roi->width;
-  ros2_msg->roi->do_rectify = ros1_msg->roi->do_rectify;
+  ros2_msg->roi.x_offset = ros1_msg->roi.x_offset;
+  ros2_msg->roi.y_offset = ros1_msg->roi.y_offset;
+  ros2_msg->roi.height = ros1_msg->roi.height;
+  ros2_msg->roi.width = ros1_msg->roi.width;
+  ros2_msg->roi.do_rectify = ros1_msg->roi.do_rectify;
 
   pub->publish(std::move(ros2_msg));
 }
@@ -95,7 +95,7 @@ int main(int argc, char * argv[])
 
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
-  auto node = rclcpp::Node::make_shared("bridge_scan");
+  auto node = rclcpp::Node::make_shared("bridge_camera_info");
   node->declare_parameter("topic_name", "topic");
   std::string topic_name =  node->get_parameter("topic_name").get_parameter_value().get<std::string>();
   pub = node->create_publisher<sensor_msgs::msg::CameraInfo>(topic_name, qos);
