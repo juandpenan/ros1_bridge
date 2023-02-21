@@ -107,14 +107,14 @@ void Callback(boost::shared_ptr<sensor_msgs::CameraInfo> ros1_msg)
 
   ros2_msg->height = ros1_msg->height;
   ros2_msg->width = ros1_msg->width;
-  ros2_msgs->distortion_model = ros1_msg->distortion_model;
-  ros2_msgs->D = std::move(ros1_msg->D);
-  ros2_msgs->K = std::move(ros1_msg->K);
-  ros2_msgs->R = std::move(ros1_msg->R);
-  ros2_msgs->P = std::move(ros1_msg->P);
-  ros2_msgs->binning_x = ros1_msg->binning_x;
-  ros2_msgs->binning_y = ros1_msg->binning_y;
-  ros2_msgs->roi = ros1_msg->roi;
+  ros2_msg->distortion_model = ros1_msg->distortion_model;
+  ros2_msg->D = std::move(ros1_msg->D);
+  ros2_msg->K = std::move(ros1_msg->K);
+  ros2_msg->R = std::move(ros1_msg->R);
+  ros2_msg->P = std::move(ros1_msg->P);
+  ros2_msg->binning_x = ros1_msg->binning_x;
+  ros2_msg->binning_y = ros1_msg->binning_y;
+  ros2_msg->roi = ros1_msg->roi;
 
   pub->publish(std::move(ros2_msg));
 }
