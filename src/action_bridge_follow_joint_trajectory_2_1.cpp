@@ -114,9 +114,8 @@ int main(int argc, char *argv[])
     std::string action_name_;
     action_name_ = "/arm_torso_controller/follow_joint_trajectory";
 
-    if (argc >= 2) {
-        controller_name_ = argv[1];
-        action_name_ = controller_name_ + action_name_;}
+    controller_name_ = argv[1];
+    action_name_ = controller_name_ + action_name_;
 
   return FollowJointTrajectoryActionBridge::main(action_name_,
                                                  argc, argv);
