@@ -43,7 +43,7 @@ public:
   : rclcpp_lifecycle::LifecycleNode(node_name,
       rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
   {
-    pub = this->create_publisher<sensor_msgs::msg::Image>("/xtion/rgb/camera_info", 100);
+    pub = this->create_publisher<sensor_msgs::msg::CameraInfo>("/xtion/rgb/camera_info", 100);
   }
 
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
@@ -92,7 +92,7 @@ public:
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
   }
 
-  friend void Callback(boost::shared_ptr<sensor_msgs::Image> ros1_msg);
+  friend void Callback(boost::shared_ptr<sensor_msgs::CameraInfo> ros1_msg);
 };
 
 void Callback(boost::shared_ptr<sensor_msgs::CameraInfo> ros1_msg)
@@ -128,7 +128,7 @@ int main(int argc, char * argv[])
   // ROS 1 node and subscriber
   ros::init(argc, argv, "image_1_to_2");
   ros::NodeHandle n;
-  ros::Subscriber sub = n.subscribe("/xtion/rgb/camera_info", 100, TFCallback);
+  ros::Subscriber sub = n.subscribe("/xtion/rgb/camera_info", 100, Callback);
 
   while (rclcpp::ok() && ros::ok()) {
     ros::spinOnce();
