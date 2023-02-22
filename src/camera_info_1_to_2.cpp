@@ -108,13 +108,28 @@ void Callback(boost::shared_ptr<sensor_msgs::CameraInfo> ros1_msg)
   ros2_msg->height = ros1_msg->height;
   ros2_msg->width = ros1_msg->width;
   ros2_msg->distortion_model = ros1_msg->distortion_model;
+
   ros2_msg->d = std::move(ros1_msg->D);
-  ros2_msg->k = std::move(ros1_msg->K);
-  ros2_msg->r = std::move(ros1_msg->R);
-  ros2_msg->p = std::move(ros1_msg->P);
+
+  std::array<double, 9> k_array;
+  std::copy(ros1_msg->K.begin(), ros1_msg->K.end(), k_array.begin());
+  ros2_msg->k = k_array;
+
+  std::array<double, 9> r_array;
+  std::copy(ros1_msg->R.begin(), ros1_msg->R.end(), r_array.begin());
+  ros2_msg->r = r_array;
+
+  std::array<double, 12> p_array;
+  std::copy(ros1_msg->P.begin(), ros1_msg->P.end(), p_array.begin());
+  ros2_msg->p = p_array;
+
   ros2_msg->binning_x = ros1_msg->binning_x;
   ros2_msg->binning_y = ros1_msg->binning_y;
-  ros2_msg->roi = std::move(ros1_msg->roi);
+  ros2_msg->roi.x_offset = ros1_msg->roi.x_offset;
+  ros2_msg->roi.y_offset = ros1_msg->roi.y_offset;
+  ros2_msg->roi.height = ros1_msg->roi.height;
+  ros2_msg->roi.width = ros1_msg->roi.width;
+  ros2_msg->roi.do_rectify = ros1_msg->roi.do_rectify;
 
   pub->publish(std::move(ros2_msg));
 }
