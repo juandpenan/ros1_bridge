@@ -206,17 +206,24 @@ def generate_launch_description():
             executable='moveit_2_to_1',
             output='screen',
             parameters=[])
+    
+    camera_info_1_to_2_node = LifecycleNode(
+            name='camera_info_1_to_2',
+            package='ros1_bridge',
+            executable='camera_info_1_to_2',
+            output='screen',
+            parameters=[])
 
-    moveit_2_to_1_configure = launch.actions.EmitEvent(
+    camera_info_1_to_2_configure = launch.actions.EmitEvent(
         event=launch_ros.events.lifecycle.ChangeState(
-            lifecycle_node_matcher=launch.events.matchers.matches_action(moveit_2_to_1_node),
+            lifecycle_node_matcher=launch.events.matchers.matches_action(camera_info_1_to_2_node),
             transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE,
             )
         )
 
-    moveit_2_to_1_activate = launch.actions.EmitEvent(
+    camera_info_1_to_2_activate = launch.actions.EmitEvent(
         event=launch_ros.events.lifecycle.ChangeState(
-            lifecycle_node_matcher=launch.events.matchers.matches_action(moveit_2_to_1_node),
+            lifecycle_node_matcher=launch.events.matchers.matches_action(camera_info_1_to_2_node),
             transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
             )
         )
@@ -233,11 +240,12 @@ def generate_launch_description():
 
         tf_static_1_to_2_node, tf_1_to_2_node, scan_1_to_2_node,
         odom_1_to_2_node, twist_2_to_1_node, pc2_1_to_2_node,
-        imu_1_to_2_node, image_1_to_2_node, moveit_2_to_1_node,
+        imu_1_to_2_node, image_1_to_2_node, camera_info_1_to_2_node,
         tf_static_1_to_2_configure, tf_1_to_2_configure, scan_1_to_2_configure,
         odom_1_to_2_configure, twist_2_to_1_configure, pc2_1_to_2_configure,
-        imu_1_to_2_configure, image_1_to_2_configure, moveit_2_to_1_configure,
+        imu_1_to_2_configure, image_1_to_2_configure, camera_info_1_to_2_configure,
         tf_static_1_to_2_activate, tf_1_to_2_activate, scan_1_to_2_activate,
         odom_1_to_2_activate, twist_2_to_1_activate, pc2_1_to_2_activate,
-        imu_1_to_2_activate, image_1_to_2_activate, moveit_2_to_1_activate,
+        imu_1_to_2_activate, image_1_to_2_activate, camera_info_1_to_2_activate,
+        moveit_2_to_1_node
         ])

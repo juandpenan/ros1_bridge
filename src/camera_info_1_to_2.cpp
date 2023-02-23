@@ -141,7 +141,7 @@ int main(int argc, char * argv[])
   auto node = std::make_shared<LifecycleNode>("camera_info_1_to_2");
 
   // ROS 1 node and subscriber
-  ros::init(argc, argv, "image_1_to_2");
+  ros::init(argc, argv, "camera_info_1_to_2");
   ros::NodeHandle n;
   ros::Subscriber sub = n.subscribe("/xtion/rgb/camera_info", 100, Callback);
 
