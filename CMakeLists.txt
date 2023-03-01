@@ -215,6 +215,12 @@ custom_executable(moveit_2_to_1 "src/action_bridge_follow_joint_trajectory_2_1.c
 custom_executable(camera_info_1_to_2 "src/camera_info_1_to_2.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "sensor_msgs")
+custom_executable(depth_registered_1_to_2 "src/depth_registered_1_to_2.cpp"
+  ROS1_DEPENDENCIES
+  TARGET_DEPENDENCIES "sensor_msgs")
+custom_executable(ir_image_1_to_2 "src/ir_image_1_to_2.cpp"
+  ROS1_DEPENDENCIES
+  TARGET_DEPENDENCIES "sensor_msgs")
 custom_executable(simple_bridge "src/simple_bridge.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "std_msgs")

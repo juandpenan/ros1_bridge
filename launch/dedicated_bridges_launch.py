@@ -227,6 +227,48 @@ def generate_launch_description():
             transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
             )
         )
+    
+    depth_registered_1_to_2_node = LifecycleNode(
+            name='depth_registered_1_to_2',
+            package='ros1_bridge',
+            executable='depth_registered_1_to_2',
+            output='screen',
+            parameters=[])
+
+    depth_registered_1_to_2_configure = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(depth_registered_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE,
+            )
+        )
+
+    depth_registered_1_to_2_activate = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(depth_registered_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
+            )
+        )
+    
+    ir_image_1_to_2_node = LifecycleNode(
+            name='ir_image_1_to_2',
+            package='ros1_bridge',
+            executable='ir_image_1_to_2',
+            output='screen',
+            parameters=[])
+
+    ir_image_1_to_2_configure = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(ir_image_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_CONFIGURE,
+            )
+        )
+
+    ir_image_1_to_2_activate = launch.actions.EmitEvent(
+        event=launch_ros.events.lifecycle.ChangeState(
+            lifecycle_node_matcher=launch.events.matchers.matches_action(ir_image_1_to_2_node),
+            transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
+            )
+        )
 
     return LaunchDescription([
 
@@ -241,11 +283,13 @@ def generate_launch_description():
         tf_static_1_to_2_node, tf_1_to_2_node, scan_1_to_2_node,
         odom_1_to_2_node, twist_2_to_1_node, pc2_1_to_2_node,
         imu_1_to_2_node, image_1_to_2_node, camera_info_1_to_2_node,
+        depth_registered_1_to_2_node, ir_image_1_to_2_node,
         tf_static_1_to_2_configure, tf_1_to_2_configure, scan_1_to_2_configure,
         odom_1_to_2_configure, twist_2_to_1_configure, pc2_1_to_2_configure,
         imu_1_to_2_configure, image_1_to_2_configure, camera_info_1_to_2_configure,
+        depth_registered_1_to_2_configure, ir_image_1_to_2_configure,
         tf_static_1_to_2_activate, tf_1_to_2_activate, scan_1_to_2_activate,
         odom_1_to_2_activate, twist_2_to_1_activate, pc2_1_to_2_activate,
         imu_1_to_2_activate, image_1_to_2_activate, camera_info_1_to_2_activate,
-        moveit_2_to_1_node
+        moveit_2_to_1_node, depth_registered_1_to_2_activate, ir_image_1_to_2_activate
         ])
