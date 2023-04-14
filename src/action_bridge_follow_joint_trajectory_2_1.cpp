@@ -110,7 +110,7 @@ void FollowJointTrajectoryActionBridge::translate_feedback_1_to_2(
 int main(int argc, char *argv[])
 {
     std::string action_name_;
-    action_name_ = "/arm_torso_controller/follow_joint_trajectory";
+    action_name_ = "/arm_controller/follow_joint_trajectory";
 
   return FollowJointTrajectoryActionBridge::main(action_name_,
                                                  argc, argv);
