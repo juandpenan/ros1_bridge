@@ -101,6 +101,13 @@ def generate_launch_description():
             executable='odom_1_to_2',
             output='screen',
             parameters=[])
+    
+    js_1_to_2_node = LifecycleNode(
+            name='js_1_to_2',
+            package='ros1_bridge',
+            executable='js_1_to_2',
+            output='screen',
+            parameters=[])
 
     odom_1_to_2_configure = launch.actions.EmitEvent(
         event=launch_ros.events.lifecycle.ChangeState(
@@ -291,5 +298,6 @@ def generate_launch_description():
         tf_static_1_to_2_activate, tf_1_to_2_activate, scan_1_to_2_activate,
         odom_1_to_2_activate, twist_2_to_1_activate, pc2_1_to_2_activate,
         imu_1_to_2_activate, image_1_to_2_activate, camera_info_1_to_2_activate,
-        moveit_2_to_1_node, depth_registered_1_to_2_activate, ir_image_1_to_2_activate
+        moveit_2_to_1_node, depth_registered_1_to_2_activate, ir_image_1_to_2_activate,
+        js_1_to_2_node
         ])

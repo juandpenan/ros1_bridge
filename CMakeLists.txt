@@ -224,6 +224,9 @@ custom_executable(ir_image_1_to_2 "src/ir_image_1_to_2.cpp"
 custom_executable(simple_bridge "src/simple_bridge.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "std_msgs")
+custom_executable(js_1_to_2 "src/js_1_to_2.cpp"
+  ROS1_DEPENDENCIES
+  TARGET_DEPENDENCIES "sensor_msgs")
 
 add_library(${PROJECT_NAME} SHARED
   "src/builtin_interfaces_factories.cpp"
