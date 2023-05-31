@@ -225,6 +225,10 @@ custom_executable(simple_bridge_2_to_1 "src/simple_bridge_2_to_1.cpp"
 custom_executable(simple_bridge "src/simple_bridge.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "std_msgs")
+  
+custom_executable(simple_bridge "src/action_bridge_follow_joint_trajectory_2_1.cpp"
+  ROS1_DEPENDENCIES
+  TARGET_DEPENDENCIES "actionlib" "rclcpp_action" "control_msgs")
 
 add_library(${PROJECT_NAME} SHARED
   "src/builtin_interfaces_factories.cpp"
