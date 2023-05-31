@@ -246,7 +246,8 @@ ament_target_dependencies(${PROJECT_NAME}
   "ros1_sensor_msgs"
   "ros1_nav_msgs"
   "ros1_tf2_msgs"
-  "ros1_geometry_msgs")
+  "ros1_geometry_msgs"
+  "ros1_control_msgs")
 
 install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION lib
