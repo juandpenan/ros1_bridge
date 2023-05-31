@@ -164,7 +164,9 @@ function(custom_executable target)
       "ros1_sensor_msgs"
       "ros1_nav_msgs"
       "ros1_tf2_msgs"
-      "ros1_geometry_msgs")
+      "ros1_geometry_msgs"
+      "ros1_control_msgs"
+      "ros1_actionlib")
   endif()
   if(ARG_DEPENDENCIES)
     add_dependencies(${target} ${ARG_DEPENDENCIES})
@@ -228,7 +230,7 @@ custom_executable(simple_bridge "src/simple_bridge.cpp"
   
 custom_executable(simple_bridge "src/action_bridge_follow_joint_trajectory_2_1.cpp"
   ROS1_DEPENDENCIES
-  TARGET_DEPENDENCIES "actionlib" "rclcpp_action" "control_msgs")
+  TARGET_DEPENDENCIES "rclcpp_action" "control_msgs")
 
 add_library(${PROJECT_NAME} SHARED
   "src/builtin_interfaces_factories.cpp"
