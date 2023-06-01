@@ -20,6 +20,9 @@ find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(tf2_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(control_msgs REQUIRED)
+find_package(rclcpp_action REQUIRED)
+
 
 # find ROS 1 packages
 set(cmake_extras_files cmake/find_ros1_package.cmake cmake/find_ros1_interface_packages.cmake)
@@ -48,8 +51,8 @@ find_ros1_package(sensor_msgs REQUIRED)
 find_ros1_package(nav_msgs REQUIRED)
 find_ros1_package(tf2_msgs REQUIRED)
 find_ros1_package(geometry_msgs REQUIRED)
-
-
+find_ros1_package(control_msgs REQUIRED)
+find_ros1_package(actionlib REQUIRED)
 
 # find ROS 1 packages with messages / services
 include(cmake/find_ros1_interface_packages.cmake)
@@ -355,4 +358,5 @@ install(
   DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}
  )
+
 
