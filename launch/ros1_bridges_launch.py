@@ -20,7 +20,9 @@ def generate_launch_description():
 	"range": "simple_bridge_1_to_2_sonar",
 	"compressed": "simple_bridge_1_to_2_compressed",
 	"point_cloud2": "simple_bridge_1_to_2_point_cloud",
-	"camera_info": "simple_bridge_1_to_2_camera_info"}
+	"camera_info": "simple_bridge_1_to_2_camera_info",
+    	"moveit": "moveit_2_to_1"}
+
 	
 	data = open_yaml_file()
 
