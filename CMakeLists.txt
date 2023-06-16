@@ -22,6 +22,7 @@ find_package(tf2_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(control_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
+find_package(rcl_interfaces REQUIRED)
 
 
 # find ROS 1 packages
@@ -53,6 +54,7 @@ find_ros1_package(tf2_msgs REQUIRED)
 find_ros1_package(geometry_msgs REQUIRED)
 find_ros1_package(control_msgs REQUIRED)
 find_ros1_package(actionlib REQUIRED)
+find_ros1_package(rcl_interfaces REQUIREd)
 
 # find ROS 1 packages with messages / services
 include(cmake/find_ros1_interface_packages.cmake)
@@ -169,7 +171,8 @@ function(custom_executable target)
       "ros1_tf2_msgs"
       "ros1_geometry_msgs"
       "ros1_control_msgs"
-      "ros1_actionlib")
+      "ros1_actionlib"
+      "rcl_interfaces")
   endif()
   if(ARG_DEPENDENCIES)
     add_dependencies(${target} ${ARG_DEPENDENCIES})
@@ -235,6 +238,14 @@ custom_executable(moveit_2_to_1 "src/action_bridge_follow_joint_trajectory_2_1.c
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "rclcpp_action" "control_msgs")
 
+custom_executable(simple_bridge_2_to_1_log "src/simple_bridge_2_to_1_log.cpp"
+  ROS1_DEPENDENCIES
+  TARGET_DEPENDENCIES "rcl_interfaces")
+
+custom_executable(simple_bridge_1_to_2_jointState "src/simple_bridge_1_to_2_jointState.cpp"
+  ROS1_DEPENDENCIES
+  TARGET_DEPENDENCIES "sensor_msgs")
+
 add_library(${PROJECT_NAME} SHARED
   "src/builtin_interfaces_factories.cpp"
   "src/convert_builtin_interfaces.cpp"
@@ -250,7 +261,8 @@ ament_target_dependencies(${PROJECT_NAME}
   "ros1_nav_msgs"
   "ros1_tf2_msgs"
   "ros1_geometry_msgs"
-  "ros1_control_msgs")
+  "ros1_control_msgs"
+  "ros1_rcl_interfaces")
 
 install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION lib
