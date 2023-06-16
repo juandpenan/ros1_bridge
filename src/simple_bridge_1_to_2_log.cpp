@@ -22,7 +22,7 @@
 # pragma clang diagnostic ignored "-Wunused-parameter"
 #endif
 #include "ros/ros.h"
-#include "rcl_interfaces/msg/Log.h"
+#include "rosgraph_msgs/Log.h"
 
 #ifdef __clang__
 # pragma clang diagnostic pop
@@ -30,31 +30,25 @@
 
 // include ROS 2
 #include "rclcpp/rclcpp.hpp"
-#include "rcl_interfaces/msg/log.hpp"
+#include "rclinterfaces/msg/log.hpp"
 
 
-rclcpp::Publisher<rcl_interfaces::msg::Log>::SharedPtr pub;
+rclcpp::Publisher<rosgraph_msgs::msg::Log>::SharedPtr pub;
 
-void topic_callback(const rcl_interfaces::Log::ConstPtr & ros1_msg)
+void topic_callback(const rosgraph_msgs::Log::ConstPtr & ros1_msg)
 {
-  auto ros2_msg = std::make_unique<rcl_interfaces::msg::Log>();
-  
-  ros2_msg->DEBUG = ros1_msg->DEBUG;
-  ros2_msg->INFO = ros1_msg->INFO;
-  ros2_msg->WARN = ros1_msg->WARN;
-  ros2_msg->ERROR = ros1_msg->ERROR;
-  ros2_msg->FATAL = ros1_msg->FATAL;
+  auto ros2_msg = std::make_unique<rosgraph_msgs::msg::Log>();
 
+  ros2_msg->stamp.sec = ros1_msg->header.stamp.sec;
+  ros2_msg->stamp.nanosec = ros1_msg->header.stamp.nsec;
+
+  
   ros2_msg->level = ros1_msg->level;
   ros2_msg->name = ros1_msg->name;
   ros2_msg->msg = ros1_msg->msg;
   ros2_msg->file = ros1_msg->file;
   ros2_msg->function = ros1_msg->function;
-  ros2_msg->line = ros1_msg->line;  
-
-  ros2_msg->stamp.sec = ros1_msg->stamp.sec;
-  ros2_msg->stamp.nanosec = ros1_msg->stamp.nanosec;
-
+  ros2_msg->line = ros1_msg->line;
 
   pub->publish(std::move(ros2_msg));
 }
@@ -65,8 +59,8 @@ int main(int argc, char * argv[])
     static const rmw_qos_profile_t rmw_qos_profile_default =
   {
     RMW_QOS_POLICY_HISTORY_KEEP_LAST,
-    50,
-    RMW_QOS_POLICY_RELIABILITY_RELIABLE,
+    200,
+    RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT,
     RMW_QOS_POLICY_DURABILITY_VOLATILE,
     RMW_QOS_DEADLINE_DEFAULT,
     RMW_QOS_LIFESPAN_DEFAULT,
@@ -84,15 +78,15 @@ int main(int argc, char * argv[])
 
   // ROS 2 node and publisher
   rclcpp::init(argc, argv);
-  auto node = rclcpp::Node::make_shared("bridge_talker_log");
+  auto node = rclcpp::Node::make_shared("bridge_log");
   node->declare_parameter("topic_name", "topic");
   std::string topic_name =  node->get_parameter("topic_name").get_parameter_value().get<std::string>();
-  pub = node->create_publisher<nav_msgs::msg::Odometry>(topic_name, qos);
+  pub = node->create_publisher<rosgraph_msgs::msg::Log>(topic_name, qos);
 
   // ROS 1 node and subscriber
-  ros::init(argc, argv, "bridge_listener_log");
+  ros::init(argc, argv, node->get_name());
   ros::NodeHandle n;
-  ros::Subscriber sub = n.subscribe(topic_name, 50, topic_callback);
+  ros::Subscriber sub = n.subscribe(topic_name, 200, topic_callback);
 
   ros::spin();
 
