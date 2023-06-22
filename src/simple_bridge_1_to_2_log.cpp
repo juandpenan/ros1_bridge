@@ -30,14 +30,14 @@
 
 // include ROS 2
 #include "rclcpp/rclcpp.hpp"
-#include "rclinterfaces/msg/log.hpp"
+#include "rcl_interfaces/msg/log.hpp"
 
 
-rclcpp::Publisher<rosgraph_msgs::msg::Log>::SharedPtr pub;
+rclcpp::Publisher<rcl_interfaces::msg::Log>::SharedPtr pub;
 
-void topic_callback(const rosgraph_msgs::Log::ConstPtr & ros1_msg)
+void topic_callback(const rcl_interfaces::Log::ConstPtr & ros1_msg)
 {
-  auto ros2_msg = std::make_unique<rosgraph_msgs::msg::Log>();
+  auto ros2_msg = std::make_unique<rcl_interfaces::msg::Log>();
 
   ros2_msg->stamp.sec = ros1_msg->header.stamp.sec;
   ros2_msg->stamp.nanosec = ros1_msg->header.stamp.nsec;
@@ -81,7 +81,7 @@ int main(int argc, char * argv[])
   auto node = rclcpp::Node::make_shared("bridge_log");
   node->declare_parameter("topic_name", "topic");
   std::string topic_name =  node->get_parameter("topic_name").get_parameter_value().get<std::string>();
-  pub = node->create_publisher<rosgraph_msgs::msg::Log>(topic_name, qos);
+  pub = node->create_publisher<rcl_interfaces::msg::Log>(topic_name, qos);
 
   // ROS 1 node and subscriber
   ros::init(argc, argv, node->get_name());
