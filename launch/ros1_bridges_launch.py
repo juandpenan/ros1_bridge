@@ -21,7 +21,7 @@ def generate_launch_description():
 	"compressed": "simple_bridge_1_to_2_compressed",
 	"point_cloud2": "simple_bridge_1_to_2_point_cloud",
 	"camera_info": "simple_bridge_1_to_2_camera_info",
-    "log": "simple_bridge_2_to_1_log",
+    "log": "simple_bridge_1_to_2_log",
 	"joint_state": "simple_bridge_1_to_2_jointState"}
 
 	
