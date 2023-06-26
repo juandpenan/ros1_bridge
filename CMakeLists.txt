@@ -238,6 +238,10 @@ custom_executable(moveit_2_to_1 "src/action_bridge_follow_joint_trajectory_2_1.c
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "rclcpp_action" "control_msgs")
 
+custom_executable(head_2_to_1 "src/action_head_1_to_2.cpp"
+  ROS1_DEPENDENCIES
+  TARGET_DEPENDENCIES "rclcpp_action" "control_msgs")
+
 custom_executable(simple_bridge_1_to_2_log "src/simple_bridge_1_to_2_log.cpp"
   ROS1_DEPENDENCIES
   TARGET_DEPENDENCIES "rcl_interfaces" "rosgraph_msgs")
