@@ -61,7 +61,7 @@ USER bridge
 
 RUN mkdir -p ros2_foxy_bridge_ws/src
 WORKDIR /home/bridge/ros2_foxy_bridge_ws
-RUN wget https://raw.githubusercontent.com/Juancams/ros1_bridge/dedicated_bridges_lifecycle/ros2_foxy.repos
+RUN wget https://raw.githubusercontent.com/juandpenan/ros1_bridge/robocup/ros2_foxy.repos
 RUN vcs import src < ros2_foxy.repos
 
 USER root
