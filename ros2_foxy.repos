@@ -294,7 +294,7 @@ repositories:
   ros2/ros1_bridge:
     type: git
     url: https://github.com/Juancams/ros1_bridge.git
-    version: dedicated_bridges_lifecycle
+    version: robocup
   ros2/ros2_tracing:
     type: git
     url: https://github.com/ros2/ros2_tracing.git
